@@ -1,0 +1,17 @@
+{
+  "name": "unyucord-discord-bot",
+  "version": "1.0.0",
+  "description": "Discord bot that acts as a gateway to the Unyucord Minecraft server",
+  "main": "src/index.ts",
+  "type": "commonjs",
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  },
+  "author": "Nikki",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.2"
+  }
+}

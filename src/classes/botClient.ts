@@ -2,6 +2,7 @@ import {Client, Collection, Events, GatewayIntentBits} from "discord.js";
 import config from "../config.json";
 import {SlashCommand} from "../interfaces/slashCommand";
 import {registerSlashCommands} from "../handlers/commandHandler";
+import {DiscordEvent} from "../interfaces/discordEvent";
 
 export default class BotClient {
 
@@ -14,6 +15,7 @@ export default class BotClient {
     });
 
     slashCommands: Collection<string, SlashCommand> = new Collection<string, SlashCommand>();
+    events: Collection<string, DiscordEvent> = new Collection<string, DiscordEvent>()
 
     start() {
 

@@ -1,6 +1,7 @@
 import { readdirSync } from 'fs'
 import * as path from "path";
 import {botClient} from "../index";
+import {SlashCommand} from "../interfaces/slashCommand";
 
 export function registerSlashCommands() {
     console.log('Reading commands...');
@@ -9,7 +10,7 @@ export function registerSlashCommands() {
     commandFiles.forEach(fileName => {
 
         console.log(`Reading command ${fileName}...`);
-        import(path.join(`commands/${fileName}`)).then(slashCommand => {
+        import(path.join(`commands/${fileName}`)).then((slashCommand: SlashCommand) => {
             botClient.slashCommands.set(slashCommand.name, slashCommand);
         });
     });

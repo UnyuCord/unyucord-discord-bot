@@ -1,16 +1,14 @@
 import {SlashCommand} from "../interfaces/slashCommand";
-import {ApplicationCommandType, Client} from "discord.js";
+import {ApplicationCommandType, CommandInteraction, SlashCommandBuilder} from "discord.js";
 
-export const TestCommand: SlashCommand = {
-    name: 'Test',
-    description: 'Test command',
-    type: ApplicationCommandType.ChatInput,
-    run: async (client: Client, interaction) => {
+export const command: SlashCommand = {
+
+    data: new SlashCommandBuilder()
+        .setName('test')
+        .setDescription('Test command'),
+
+    run: async (interaction: CommandInteraction) => {
         const content = ':3';
-
-        await interaction.followUp({
-            ephemeral: true,
-            content
-        })
+        await interaction.reply(content);
     }
 }

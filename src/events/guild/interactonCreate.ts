@@ -1,11 +1,11 @@
 import {DiscordEvent} from "../../interfaces/discordEvent";
-import {Client, Events, Interaction} from "discord.js";
+import {Events, Interaction} from "discord.js";
 import {botClient} from "../../index";
 
-class InteractonCreate implements DiscordEvent {
+export const eventData: DiscordEvent = {
 
-    name = Events.InteractionCreate;
-    once = false;
+    name: Events.InteractionCreate,
+    once: false,
     execute(interaction: Interaction) {
 
         if (!interaction.isCommand()) return;
@@ -13,7 +13,7 @@ class InteractonCreate implements DiscordEvent {
 
         if (!command) return;
 
-        command.run()
+        command.run(interaction)
     }
 
 }

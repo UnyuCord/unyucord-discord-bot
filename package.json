@@ -1,7 +1,7 @@
 {
   "name": "unyucord-discord-bot",
   "version": "1.0.0",
-  "description": "Discord bot that acts as a gateway to the Unyucord Minecraft server",
+  "description": "Discord bot... that does stuff...",
   "main": "src/index.ts",
   "type": "commonjs",
   "scripts": {

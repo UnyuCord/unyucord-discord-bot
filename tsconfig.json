@@ -20,9 +20,6 @@
     "sourceMap": false,
     "baseUrl": "./"
   },
-  "files": [
-    "src"
-  ],
   "include": [
     "./**/*.ts"
   ],

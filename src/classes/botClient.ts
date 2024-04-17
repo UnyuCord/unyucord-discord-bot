@@ -19,7 +19,10 @@ export default class BotClient {
     async start() {
 
         console.info('Starting bot...')
-        await getSlashCommands().then(slashCommands => this.slashCommands = slashCommands);
+        await getSlashCommands()
+            .then(slashCommands => this.slashCommands = slashCommands)
+            .catch(error => console.error(error));
+
         registerEvents()
 
         this.client.login(config.token)

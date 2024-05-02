@@ -1,5 +1,5 @@
 import {Client, Collection, GatewayIntentBits} from "discord.js";
-import config from "../config.json";
+import config from "../resources/config.json";
 import {SlashCommand} from "../interfaces/slashCommand";
 import {getSlashCommands} from "../handlers/commandHandler";
 import {registerEvents} from "../handlers/eventHandler";

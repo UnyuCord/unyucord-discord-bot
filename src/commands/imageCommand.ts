@@ -12,7 +12,7 @@ import {
 } from "discord.js";
 import axios from "axios";
 import {GoogleSearchResponse} from "../interfaces/googleSearchResponse";
-import config from '../config.json'
+import config from '../resources/config.json'
 import * as https from "https";
 
 

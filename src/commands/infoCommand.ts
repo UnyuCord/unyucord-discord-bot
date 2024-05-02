@@ -17,7 +17,9 @@ export const command: SlashCommand = {
 
             const commandInteraction = interaction as ChatInputCommandInteraction;
             let user = commandInteraction.options.getUser('user');
+            let server = commandInteraction.guild;
 
+            if (!server) return;
             if (!user) user = commandInteraction.user
 
             const infoEmbed = new EmbedBuilder()
@@ -28,7 +30,7 @@ export const command: SlashCommand = {
                     {name: 'Display name', value: user.displayName},
                     {name: 'Tag', value: user.tag},
                     {name: 'Id', value: user.id},
-                    {name: 'Account creation date', value: `${user.createdAt}`},
+                    {name: 'Account creation date', value: `${user.createdAt}`}
                 )
 
             interaction.reply({embeds: [infoEmbed]});

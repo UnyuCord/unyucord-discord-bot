@@ -1,7 +1,7 @@
 import {SlashCommand} from "../interfaces/slashCommand";
 import {CommandInteraction, PermissionsBitField, SlashCommandBuilder} from "discord.js";
 import {botClient} from "../index";
-import config from "../config.json"
+import config from "../resources/config.json"
 import {sendErrorEmbed} from "../handlers/errorHandler";
 
 export const command: SlashCommand = {

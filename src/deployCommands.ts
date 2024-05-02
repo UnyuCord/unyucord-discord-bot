@@ -1,5 +1,5 @@
 import {REST, Routes} from "discord.js";
-import config from "./config.json";
+import config from "./resources/config.json";
 import {getSlashCommands} from "./handlers/commandHandler";
 
 // TODO: God this is all ugly af please fix this future me

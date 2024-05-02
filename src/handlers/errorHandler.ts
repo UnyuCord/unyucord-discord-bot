@@ -1,7 +1,15 @@
-import {CommandInteraction, EmbedBuilder} from "discord.js";
+import {CommandInteraction, EmbedBuilder, HTTPError} from "discord.js";
 
 
-export function sendErrorEmbed(interaction: CommandInteraction, errorDescription: string) {
+export function sendErrorEmbed(interaction: CommandInteraction, error: any) {
+
+    let errorDescription: string = 'Something went HORRIBLY wrong!';
+
+    if (error instanceof Error) {
+        errorDescription = error.message
+    } else if (error instanceof HTTPError) {
+        errorDescription = `${error.status} ${error.message}`
+    }
 
     const errorEmbed = new EmbedBuilder()
         .setColor('Red')

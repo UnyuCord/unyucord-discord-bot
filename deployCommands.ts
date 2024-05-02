@@ -1,6 +1,6 @@
 import {REST, Routes} from "discord.js";
-import config from "./resources/config.json";
-import {getSlashCommands} from "./handlers/commandHandler";
+import config from "./src/resources/config.json";
+import {getSlashCommands} from "./src/handlers/commandHandler";
 
 // TODO: God this is all ugly af please fix this future me
 const rest = new REST({version: "10"}).setToken(config.token);
@@ -10,25 +10,7 @@ getSlashCommands().then(commands => {
 });
 
 
-
-export async function deployGuildCommands(guildId: string, commandsData: any[]) {
-    try {
-        console.log("Started refreshing application (/) commands.");
-
-        await rest.put(
-            Routes.applicationGuildCommands(config.token, guildId),
-            {
-                body: commandsData,
-            }
-        );
-
-        console.log("Successfully reloaded application (/) commands.");
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-export async function deployGlobalCommands(commandsData: any[]) {
+async function deployGlobalCommands(commandsData: any[]) {
     try {
         console.log("Started refreshing application (/) commands.");
         console.log(commandsData)

@@ -10,12 +10,11 @@ export const command: SlashCommand = {
 
     async run(interaction: CommandInteraction) {
 
-        const color = "#003bb9";
         const embed = new EmbedBuilder()
             .setTitle('Bongbong!')
             .setDescription('Thats me...!!!')
             .setImage(config.bongGifs[Math.floor(Math.random() * config.bongGifs.length)])
-            .setColor(color)
+            .setColor(`#${config.bongColor}`)
 
         interaction.reply({embeds: [embed]});
     }

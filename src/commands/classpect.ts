@@ -16,6 +16,7 @@ export const command: SlashCommand = {
 
         const classpectEmbed = new EmbedBuilder()
             .setColor('Random')
+            .setTitle('YOUR CLASSPECT IS...')
             .setDescription(`${classpectClass} of ${classpectAspect}, ${classpectBlood}, ${classpectMoon}`);
 
         interaction.reply({embeds: [classpectEmbed]});

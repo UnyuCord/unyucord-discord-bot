@@ -1,19 +1,25 @@
 import {DiscordEvent} from "../../interfaces/discordEvent";
 import {Events, Interaction} from "discord.js";
 import {botClient} from "../../index";
+import {sendErrorEmbed} from "../../handlers/errorHandler";
 
 export const eventData: DiscordEvent = {
 
     name: Events.InteractionCreate,
     once: false,
-    execute(interaction: Interaction) {
+    async execute(interaction: Interaction) {
 
         if (!interaction.isCommand()) return;
         const command = botClient.slashCommands.get(interaction.commandName);
 
         if (!command) return;
 
-        command.run(interaction)
+        try {
+            // TODO: Uhhh, probably shouldnt make it always await, find a better solution idiot
+            await command.run(interaction)
+        } catch (error) {
+            sendErrorEmbed(interaction, error);
+        }
     }
 
 }

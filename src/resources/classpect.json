@@ -1,0 +1,44 @@
+{
+  "classes": [
+    "Rogue",
+    "Knight",
+    "Bard",
+    "Thief",
+    "Seer",
+    "Prince",
+    "Heir",
+    "Mage",
+    "Maid",
+    "Sylph",
+    "Page",
+    "Witch"
+  ],
+  "aspects": [
+    "Time",
+    "Hope",
+    "Doom",
+    "Light",
+    "Mind",
+    "Blood",
+    "Life",
+    "Space",
+    "Rage",
+    "Breath",
+    "Void",
+    "Heart"
+  ],
+  "blood": [
+    "rust",
+    "orange",
+    "gold",
+    "lime",
+    "olive",
+    "jade",
+    "teal",
+    "blue",
+    "indigo",
+    "purple",
+    "violet",
+    "fuchsia"
+  ]
+}

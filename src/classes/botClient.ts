@@ -25,6 +25,6 @@ export default class BotClient {
 
         registerEvents()
 
-        this.client.login(config.token)
+        await this.client.login(config.token)
     }
 }

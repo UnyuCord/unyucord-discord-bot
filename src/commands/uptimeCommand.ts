@@ -19,7 +19,7 @@ export const command: SlashCommand = {
         hours = Math.floor(minutes / 60);
         days = Math.floor(hours / 24);
 
-        interaction.reply(`The bot's uptime is: ${days} days, ${hours - days * 24} hours, ${minutes - hours * 60} minutes and ${seconds - minutes * 60} seconds`);
+        interaction.reply(`The bots uptime is: ${days} days, ${hours - days * 24} hours, ${minutes - hours * 60} minutes and ${seconds - minutes * 60} seconds`);
 
     }
 }

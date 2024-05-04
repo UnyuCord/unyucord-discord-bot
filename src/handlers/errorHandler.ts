@@ -20,3 +20,15 @@ export function sendErrorEmbed(interaction: CommandInteraction, error: any) {
 
     interaction.reply({embeds: [errorEmbed]});
 }
+
+export function sendErrorEmbedString(interaction: CommandInteraction, errorMessage: string) {
+
+    const errorEmbed = new EmbedBuilder()
+        .setColor('Red')
+        .setTitle(':boom: BONGBONG HAS JUST EXPLODED!!! :boom:')
+        .setImage("https://media.tenor.com/--tErbWBQ3AAAAAi/bongbong-explosion.gif")
+        .setDescription(errorMessage)
+        .setFooter({text: 'Blame Nikki for this...'})
+
+    interaction.reply({embeds: [errorEmbed]});
+}

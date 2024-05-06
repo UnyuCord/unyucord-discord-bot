@@ -1,6 +1,5 @@
 import {readdirSync} from 'fs'
 import * as path from "path";
-import {botClient} from "../index";
 import {SlashCommand} from "../interfaces/slashCommand";
 import {Collection} from "discord.js";
 

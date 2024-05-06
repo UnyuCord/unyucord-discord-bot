@@ -17,24 +17,39 @@ export const command: SlashCommand = {
 
             const commandInteraction = interaction as ChatInputCommandInteraction;
             let user = commandInteraction.options.getUser('user');
+
+            if (!user) user = commandInteraction.user
             let server = commandInteraction.guild;
 
+
             if (!server) return;
-            if (!user) user = commandInteraction.user
+            server.members.fetch(user.id).then(member => {
 
-            const infoEmbed = new EmbedBuilder()
-                .setColor('Random')
-                .setTitle(`User ${user.globalName}`)
-                .setThumbnail(user.avatarURL())
-                .addFields(
-                    {name: 'Display name', value: user.displayName},
-                    {name: 'Tag', value: user.tag},
-                    {name: 'Id', value: user.id},
-                    {name: 'Account creation date', value: `${user.createdAt}`}
-                )
+                if (member.joinedAt) {
 
-            interaction.reply({embeds: [infoEmbed]});
+                    let memberRoles = '';
+                    member.roles.cache.forEach(role =>  {
+                        memberRoles += `<@&${role.id}> `;
+                    });
 
+                    // Replace role id that matches guild id, as it is the @everyone role and is irrelevant
+                    memberRoles = memberRoles.replace(`<@&${server.id}>`, '');
+                    const infoEmbed = new EmbedBuilder()
+                        .setColor(`${member.displayHexColor}`)
+                        .setTitle(`User ${member.user.username}`)
+                        .setThumbnail(user.avatarURL())
+                        .addFields(
+                            {name: 'Nickname', value: `${member.nickname || 'None'}`},
+                            {name: 'Display name', value: user.displayName},
+                            {name: 'Id', value: user.id},
+                            {name: 'Account creation date', value: `${user.createdAt}`},
+                            {name: 'Member since', value: `<t:${Math.floor(member.joinedAt.valueOf() / 1000)}:R>`},
+                            {name: 'Roles', value: memberRoles || 'None'}
+                        )
+
+                    interaction.reply({embeds: [infoEmbed]});
+                }
+            });
         }
     }
 

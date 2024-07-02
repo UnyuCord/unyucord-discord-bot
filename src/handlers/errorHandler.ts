@@ -21,7 +21,7 @@ export function sendErrorEmbed(interaction: CommandInteraction, error: any) {
     interaction.reply({embeds: [errorEmbed]});
 }
 
-export function sendErrorEmbedString(interaction: CommandInteraction, errorMessage: string) {
+export function sendErrorEmbedCustomMessage(interaction: CommandInteraction, errorMessage: string) {
 
     const errorEmbed = new EmbedBuilder()
         .setColor('Red')

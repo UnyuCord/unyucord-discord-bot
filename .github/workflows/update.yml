@@ -16,5 +16,6 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
+        request_pty: true
         port: 22
         script: "sh update.sh"

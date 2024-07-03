@@ -17,5 +17,4 @@ jobs:
         username: ${{ secrets.SSH_USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         port: 22
-        script: |
-          sh update.sh
+        script: "sh update.sh"

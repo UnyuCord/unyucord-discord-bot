@@ -10,7 +10,7 @@ export const eventData: DiscordEvent = {
     execute(): void {
 
         if (botClient.client.user) {
-            botClient.client.user.setActivity('Watching for git activity... and commands ig...');
+            botClient.client.user.setActivity('Hi! I am BongBong Lobotomy Corporation!!!');
             botClient.client.user.setStatus('dnd');
             console.info('Client ready!');
         }

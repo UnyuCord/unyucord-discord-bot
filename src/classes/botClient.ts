@@ -18,6 +18,7 @@ export default class BotClient {
 
     async start() {
 
+        console.info('PENIS!!!')
         console.info('Starting bot...');
         registerEvents()
         await getSlashCommands()

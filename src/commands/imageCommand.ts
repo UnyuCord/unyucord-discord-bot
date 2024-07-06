@@ -102,7 +102,7 @@ export const command: SlashCommand = {
                             imageIndex = Math.floor(Math.random() * response.data.items.length);
                             break;
                         default:
-                            console.log('uhh... this isnt supposed to happen right?')
+                            console.error('uhh... this isnt supposed to happen right?')
                             imageIndex = 0;
                             break;
                     }

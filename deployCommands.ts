@@ -12,8 +12,8 @@ getSlashCommands().then(commands => {
 
 async function deployGlobalCommands(commandsData: any[]) {
     try {
-        console.log("Started refreshing application (/) commands.");
-        console.log(commandsData)
+        console.info("Started refreshing application (/) commands.");
+        console.info(commandsData)
 
         await rest.put(
             Routes.applicationCommands(config.applicationId),
@@ -22,7 +22,7 @@ async function deployGlobalCommands(commandsData: any[]) {
             }
         );
 
-        console.log("Successfully reloaded application (/) commands.");
+        console.info("Successfully reloaded application (/) commands.");
     } catch (error) {
         console.error(error);
     }

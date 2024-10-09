@@ -1,9 +1,9 @@
-import { botClient } from "src";
 import { SlashCommand } from "../interfaces/slashCommand";
 import { ChatInputCommandInteraction, CommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
-import { userCollection } from "src/db/dbHandler";
 import config from "../resources/config.json";
-import { UserSchema } from "src/interfaces/userSchema";
+import { userCollection } from '../db/dbHandler';
+import { UserSchema } from '../interfaces/userSchema';
+import { botClient } from '..';
 
 
 export const command: SlashCommand = {
@@ -22,15 +22,15 @@ export const command: SlashCommand = {
             const commandInteraction = interaction as ChatInputCommandInteraction;
             let user = commandInteraction.options.getUser('user');
 
-            if (!user) user = commandInteraction.user
+            if (!user) user = commandInteraction.user;
             let server = commandInteraction.guild;
 
             let ahn = 100;
             if (botClient.connectedToDb) {
 
-                userCollection.findOne<UserSchema>({ "discordId": interaction.user.id }, { projection: { "_id": 0 } }).then(result => {
-                    ahn = result?.ahn || 100;
-                });
+                const result = await userCollection.findOne<UserSchema>({ "discordId": interaction.user.id }, { projection: { "_id": 0 } });
+                ahn = result?.ahn || 100;
+
             }
 
 

@@ -14,7 +14,7 @@ export const dbClient = new MongoClient(config.mongoUri.replace('*', config.mong
 });
 
 const db = dbClient.db();
-const userCollection = db.collection(config.mongoDbCollections.users);
+export const userCollection = db.collection(config.mongoDbCollections.users);
 
 export function registerDbEvents() {
     console.info('Reading db events...');

@@ -1,6 +1,7 @@
-import {readdirSync} from "fs";
+import { readdirSync } from "fs";
 import * as path from "path";
-import {botClient} from "../index";
+import { botClient } from "../index";
+import { EventData } from "src/interfaces/eventData";
 
 export function registerEvents() {
 
@@ -17,7 +18,7 @@ export function registerEvents() {
 
             console.info(`Reading event ${fileName}...`);
 
-            const {eventData} = await import(path.join(__dirname, `../events/${eventFolder}/${fileName}`));
+            const { eventData } = await import(path.join(__dirname, `../events/${eventFolder}/${fileName}`)) as { eventData: EventData };
 
             if (eventData.once) {
                 botClient.client.once(eventData.name, (...args) => {

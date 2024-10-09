@@ -1,9 +1,9 @@
-import {REST, Routes} from "discord.js";
+import { REST, Routes } from "discord.js";
 import config from "./src/resources/config.json";
-import {getSlashCommands} from "./src/handlers/commandHandler";
+import { getSlashCommands } from "./src/handlers/commandHandler";
 
 // TODO: God this is all ugly af please fix this future me
-const rest = new REST({version: "10"}).setToken(config.token);
+const rest = new REST({ version: "10" }).setToken(config.token);
 getSlashCommands().then(commands => {
     const commandsData = commands.map(command => command.data.toJSON());
     return deployGlobalCommands(commandsData);

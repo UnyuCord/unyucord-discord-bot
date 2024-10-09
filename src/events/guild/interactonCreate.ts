@@ -1,9 +1,9 @@
-import {DiscordEvent} from "../../interfaces/discordEvent";
+import {EventData} from "../../interfaces/eventData";
 import {Events, Interaction} from "discord.js";
 import {botClient} from "../../index";
 import {sendErrorEmbed} from "../../handlers/errorHandler";
 
-export const eventData: DiscordEvent = {
+export const eventData: EventData = {
 
     name: Events.InteractionCreate,
     once: false,

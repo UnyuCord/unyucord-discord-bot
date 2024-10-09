@@ -1,6 +1,5 @@
 import {CommandInteraction, EmbedBuilder, HTTPError} from "discord.js";
 
-
 export function sendErrorEmbed(interaction: CommandInteraction, error: any) {
 
     let errorDescription: string = 'Something went HORRIBLY wrong!';

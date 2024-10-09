@@ -1,4 +1,4 @@
-import {CommandInteraction, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder,} from "discord.js";
+import { CommandInteraction, SlashCommandBuilder, SlashCommandOptionsOnlyBuilder, } from "discord.js";
 
 export interface SlashCommand {
     /*
@@ -6,5 +6,7 @@ export interface SlashCommand {
     so let's just use both, don't know why this happens
     */
     data: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder | Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">;
+    dbRequired?: boolean;
+
     run: (interaction: CommandInteraction) => void;
 }

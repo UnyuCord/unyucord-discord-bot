@@ -28,7 +28,7 @@ export const command: SlashCommand = {
             let ahn = 100;
             if (botClient.connectedToDb) {
 
-                const result = await userCollection.findOne<UserSchema>({ "discordId": interaction.user.id }, { projection: { "_id": 0 } });
+                const result = await userCollection.findOne<UserSchema>({ "discordId": user.id }, { projection: { "_id": 0 } });
                 ahn = result?.ahn || 100;
 
             }

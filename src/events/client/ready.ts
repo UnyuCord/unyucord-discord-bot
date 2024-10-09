@@ -1,9 +1,9 @@
-import {DiscordEvent} from "../../interfaces/discordEvent";
+import {EventData} from "../../interfaces/eventData";
 import {Events} from "discord.js";
 import {botClient} from "../../index";
 
 
-export const eventData: DiscordEvent = {
+export const eventData: EventData = {
 
     name: Events.ClientReady,
     once: true,

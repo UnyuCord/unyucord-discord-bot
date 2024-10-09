@@ -1,5 +1,9 @@
-import {SlashCommand} from "../interfaces/slashCommand";
-import {ChatInputCommandInteraction, CommandInteraction, EmbedBuilder, SlashCommandBuilder} from "discord.js";
+import { SlashCommand } from "../interfaces/slashCommand";
+import { ChatInputCommandInteraction, CommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import config from "../resources/config.json";
+import { userCollection } from '../db/dbHandler';
+import { UserSchema } from '../interfaces/userSchema';
+import { botClient } from '..';
 
 
 export const command: SlashCommand = {
@@ -11,15 +15,23 @@ export const command: SlashCommand = {
                 .setDescription('A Discord user.')
         }),
 
-    run(interaction: CommandInteraction): void {
+    async run(interaction: CommandInteraction) {
 
         if (interaction.isChatInputCommand()) {
 
             const commandInteraction = interaction as ChatInputCommandInteraction;
             let user = commandInteraction.options.getUser('user');
 
-            if (!user) user = commandInteraction.user
+            if (!user) user = commandInteraction.user;
             let server = commandInteraction.guild;
+
+            let ahn = 100;
+            if (botClient.connectedToDb) {
+
+                const result = await userCollection.findOne<UserSchema>({ "discordId": user.id }, { projection: { "_id": 0 } });
+                ahn = result?.ahn || 100;
+
+            }
 
 
             if (!server) return;
@@ -28,7 +40,7 @@ export const command: SlashCommand = {
                 if (member.joinedAt) {
 
                     let memberRoles = '';
-                    member.roles.cache.forEach(role =>  {
+                    member.roles.cache.forEach(role => {
                         memberRoles += `<@&${role.id}> `;
                     });
 
@@ -39,15 +51,16 @@ export const command: SlashCommand = {
                         .setTitle(`User ${member.user.username}`)
                         .setThumbnail(user.avatarURL())
                         .addFields(
-                            {name: 'Nickname', value: `${member.nickname || 'None'}`},
-                            {name: 'Display name', value: user.displayName},
-                            {name: 'Id', value: user.id},
-                            {name: 'Account creation date', value: `${user.createdAt}`},
-                            {name: 'Member since', value: `<t:${Math.floor(member.joinedAt.valueOf() / 1000)}:R>`},
-                            {name: 'Roles', value: memberRoles || 'None'}
+                            { name: 'Nickname', value: `${member.nickname || 'None'}` },
+                            { name: 'Display name', value: user.displayName },
+                            { name: 'Id', value: user.id },
+                            { name: config.currencyName, value: `${ahn}` || '-' },
+                            { name: 'Account creation date', value: `${user.createdAt}` },
+                            { name: 'Member since', value: `<t:${Math.floor(member.joinedAt.valueOf() / 1000)}:R>` },
+                            { name: 'Roles', value: memberRoles || 'None' }
                         )
 
-                    interaction.reply({embeds: [infoEmbed]});
+                    interaction.reply({ embeds: [infoEmbed] });
                 }
             });
         }

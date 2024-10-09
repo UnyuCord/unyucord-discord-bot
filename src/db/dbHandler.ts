@@ -3,6 +3,7 @@ import { MongoClient, ServerApiVersion } from "mongodb";
 import config from "../resources/config.json"
 import * as path from 'path';
 import { EventData } from "src/interfaces/eventData";
+import { UserSchema } from "src/interfaces/userSchema";
 
 export const dbClient = new MongoClient(config.mongoUri.replace('*', config.mongoPassword), {
     serverApi: {
@@ -11,6 +12,10 @@ export const dbClient = new MongoClient(config.mongoUri.replace('*', config.mong
         deprecationErrors: true
     }
 });
+
+const db = dbClient.db();
+const userCollection = db.collection(config.mongoDbCollections.users);
+
 export function registerDbEvents() {
     console.info('Reading db events...');
 
@@ -33,4 +38,17 @@ export function registerDbEvents() {
     });
 
     console.info('Finished reading db events!');
+}
+
+export async function checkIfUserHasDbEntry(id: string): Promise<boolean> {
+    return !!(await userCollection.findOne({ 'discordId': id }));
+}
+
+export async function createUserDbEntry(id: string): Promise<boolean> {
+
+    const newUser: UserSchema = {
+        "discordId": id,
+        "ahn": 100
+    }
+    return !!(await userCollection.insertOne(newUser));
 }

@@ -32,7 +32,6 @@ export default class BotClient {
         console.info('Connecting to db...');
         await dbClient.connect();
 
-        console.info(this.connectedToDb);
         console.info(`Logging into Discord client...`);
         await this.client.login(config.token);
     }

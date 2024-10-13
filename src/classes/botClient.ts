@@ -30,7 +30,9 @@ export default class BotClient {
             .catch(error => console.error(error));
 
         console.info('Connecting to db...');
-        await dbClient.connect();
+        await dbClient.connect().catch(error => {
+            console.warn(`Could not connect with DB: ${error}`);
+        });
 
         console.info(`Logging into Discord client...`);
         await this.client.login(config.token);

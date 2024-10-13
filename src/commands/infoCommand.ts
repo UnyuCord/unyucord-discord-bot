@@ -25,12 +25,11 @@ export const command: SlashCommand = {
             if (!user) user = commandInteraction.user;
             let server = commandInteraction.guild;
 
-            let ahn = 100;
+            let ahn: string = '-';
             if (botClient.connectedToDb) {
 
                 const result = await userCollection.findOne<UserSchema>({ "discordId": user.id }, { projection: { "_id": 0 } });
-                ahn = result?.ahn || 100;
-
+                ahn = `${result?.ahn}` || '100';
             }
 
 
@@ -54,7 +53,7 @@ export const command: SlashCommand = {
                             { name: 'Nickname', value: `${member.nickname || 'None'}` },
                             { name: 'Display name', value: user.displayName },
                             { name: 'Id', value: user.id },
-                            { name: config.currencyName, value: `${ahn}` || '-' },
+                            { name: config.currencyName, value: ahn },
                             { name: 'Account creation date', value: `${user.createdAt}` },
                             { name: 'Member since', value: `<t:${Math.floor(member.joinedAt.valueOf() / 1000)}:R>` },
                             { name: 'Roles', value: memberRoles || 'None' }

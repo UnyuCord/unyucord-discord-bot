@@ -30,7 +30,6 @@ export const command: SlashCommand = {
 
                 const result = await userCollection.findOne<UserSchema>({ "discordId": user.id }, { projection: { "_id": 0 } });
                 ahn = `${result?.ahn}` || '100';
-
             }
 
 

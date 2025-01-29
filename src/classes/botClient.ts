@@ -1,9 +1,9 @@
-import { Client, Collection, GatewayIntentBits } from "discord.js";
+import {Client, Collection, GatewayIntentBits} from "discord.js";
 import config from "../resources/config.json";
-import { SlashCommand } from "../interfaces/slashCommand";
-import { getSlashCommands } from "../handlers/commandHandler";
-import { registerEvents } from "../handlers/eventHandler";
-import { dbClient, registerDbEvents } from "../db/dbHandler";
+import {SlashCommand} from "../interfaces/slashCommand";
+import {getSlashCommands} from "../handlers/commandHandler";
+import {registerEvents} from "../handlers/eventHandler";
+import {Mongoose} from "mongoose";
 
 export default class BotClient {
 
@@ -16,6 +16,7 @@ export default class BotClient {
     });
 
     slashCommands: Collection<string, SlashCommand> = new Collection<string, SlashCommand>();
+    db: Mongoose = new Mongoose();
     connectedToDb = false;
 
     async start() {
@@ -23,16 +24,18 @@ export default class BotClient {
         console.info('Starting bot...');
 
         registerEvents();
-        registerDbEvents()
 
         await getSlashCommands()
             .then(slashCommands => this.slashCommands = slashCommands)
             .catch(error => console.error(error));
 
         console.info('Connecting to db...');
-        await dbClient.connect().catch(error => {
-            console.warn(`Could not connect with DB: ${error}`);
-        });
+         await this.db.connect(config.mongoUri)
+            .then(() =>  {
+                this.connectedToDb = true;
+                console.log('Connected to db!')
+            })
+            .catch(error => console.error(`Could not connect to db: ${error}`));
 
         console.info(`Logging into Discord client...`);
         await this.client.login(config.token);

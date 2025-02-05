@@ -1,9 +1,8 @@
-import { SlashCommand } from "../interfaces/slashCommand";
-import { ChatInputCommandInteraction, CommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import {SlashCommand} from "../interfaces/slashCommand";
+import {ChatInputCommandInteraction, CommandInteraction, EmbedBuilder, SlashCommandBuilder} from "discord.js";
 import config from "../resources/config.json";
-import { userCollection } from '../db/dbHandler';
-import { UserSchema } from '../interfaces/userSchema';
-import { botClient } from '..';
+import {botClient} from '..';
+import {checkDbProfileExists} from "../db/dbHandler";
 
 
 export const command: SlashCommand = {
@@ -23,13 +22,14 @@ export const command: SlashCommand = {
             let user = commandInteraction.options.getUser('user');
 
             if (!user) user = commandInteraction.user;
+
             let server = commandInteraction.guild;
-
             let ahn: string = '-';
-            if (botClient.connectedToDb) {
 
-                const result = await userCollection.findOne<UserSchema>({ "discordId": user.id }, { projection: { "_id": 0 } });
+            if (botClient.connectedToDb) {
+                const result = await checkDbProfileExists(interaction.user.id);
                 ahn = `${result?.ahn}` || '100';
+
             }
 
 

@@ -1,5 +1,5 @@
-import { SlashCommand } from "../interfaces/slashCommand";
-import { CommandInteraction, EmbedBuilder, SlashCommandBuilder } from "discord.js";
+import {SlashCommand} from "../interfaces/slashCommand";
+import {CommandInteraction, EmbedBuilder, SlashCommandBuilder} from "discord.js";
 import config from "../resources/config.json"
 
 
@@ -16,7 +16,7 @@ export const command: SlashCommand = {
             .setImage(config.bongGifs[Math.floor(Math.random() * config.bongGifs.length)])
             .setColor(`#${config.bongColor}`)
 
-        interaction.reply({ embeds: [embed] });
+        await interaction.reply({embeds: [embed]});
     }
 
 }

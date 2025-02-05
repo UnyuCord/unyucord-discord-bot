@@ -1,8 +1,9 @@
-import { EventData } from "../../interfaces/eventData";
-import { Events, Interaction } from "discord.js";
-import { botClient } from "../../index";
-import { sendErrorEmbed, sendErrorEmbedCustomMessage } from "../../handlers/errorHandler";
-import { checkIfUserHasDbEntry, createUserDbEntry } from "../../db/dbHandler";
+import {EventData} from "../../interfaces/eventData";
+import {Events, Interaction} from "discord.js";
+import {botClient} from "../../index";
+import {sendErrorEmbed, sendErrorEmbedCustomMessage} from "../../handlers/errorHandler";
+import {checkDbProfileExists} from "../../db/dbHandler";
+import {types} from 'util';
 
 export const eventData: EventData = {
 
@@ -18,16 +19,15 @@ export const eventData: EventData = {
             if (!botClient.connectedToDb) return sendErrorEmbedCustomMessage(interaction,
                 'WAGHHH AN ABNORMALITY HAS BREACHED CONTAINMENT!!! \n(***No database connection!***)');
 
-            if (! await checkIfUserHasDbEntry(interaction.user.id)) {
-                createUserDbEntry(interaction.user.id).catch(err => sendErrorEmbed(interaction, err));
-            }
+            await checkDbProfileExists(interaction.id);
         }
 
         if (!command) return;
 
         try {
-            // TODO: Uhhh, probably shouldnt make it always await, find a better solution idiot
-            await command.run(interaction)
+            if (types.isAsyncFunction(command.run)) {
+                await command.run(interaction);
+            } else command.run(interaction);
         } catch (error) {
             sendErrorEmbed(interaction, error);
         }

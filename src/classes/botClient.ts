@@ -28,7 +28,7 @@ export default class BotClient {
 
         await getSlashCommands()
             .then(slashCommands => this.slashCommands = slashCommands)
-            .catch(error => console.error(AnsiEscapeColors.RedBg + error + AnsiEscapeColors.Reset));
+            .catch(error => console.error(AnsiEscapeColors.Red + error + AnsiEscapeColors.Reset));
 
         console.info('Connecting to db...');
          await this.db.connect(config.mongoUri)
@@ -36,7 +36,7 @@ export default class BotClient {
                 this.connectedToDb = true;
                 console.log(AnsiEscapeColors.Green + 'Connected to db!' + AnsiEscapeColors.Reset)
             })
-            .catch(error => console.error(AnsiEscapeColors.RedBg + `Could not connect to db: ${error}` + AnsiEscapeColors.Reset));
+            .catch(error => console.error(AnsiEscapeColors.Red + `Could not connect to db: ${error}` + AnsiEscapeColors.Reset));
 
         console.info(`Logging into Discord client...`);
         await this.client.login(config.token);

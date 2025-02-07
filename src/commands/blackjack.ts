@@ -83,21 +83,23 @@ export const command: SlashCommand = {
             const dealerHand: number[] = [];
             const blackjackDeck: number[] = [];
 
-            for (let i = 0; i <= decksInPlay; i++) {
+            for (let i = 0; i < decksInPlay; i++) {
                 blackjackDeck.push(...deck);
             }
 
             shuffleBlackjackDeck(blackjackDeck);
-            addCardToHand(playerHand, blackjackDeck);
-            addCardToHand(dealerHand, blackjackDeck);
-            addCardToHand(playerHand, blackjackDeck);
+            addCardToHand(playerHand);
+            addCardToHand(dealerHand);
+            addCardToHand(playerHand);
+            checkPlayerHasBlackJack();
 
             const playEmbed = new EmbedBuilder()
                 .setTitle(`Blackjack game with ${interaction.user.displayName}`)
                 .setColor(`#${config.bongColor}`)
+                .setFooter({text:`Bet: ${betAmount}${config.currencyName}`})
                 .addFields(
                     {name: 'Dealer\'s hand', value: `${getSumOfHand(dealerHand)} (${dealerHand.toString()})`},
-                    {name: 'Player\'s hand', value: `${getSumOfHand(playerHand)} (${playerHand.toString()})`}
+                    {name: 'Player\'s hand', value: `${getSumOfHand(playerHand)} (${playerHand.toString()})`},
                 )
 
             const originalMessage = await interaction.reply
@@ -145,25 +147,26 @@ export const command: SlashCommand = {
                 }
             }
 
-            function addCardToHand(hand: number[], deck: number[]) {
+            function addCardToHand(hand: number[]) {
                 const indexOfToBeAddedCard = Math.floor(Math.random() * deck.length - 1)
-                hand.push(deck[indexOfToBeAddedCard]);
-                deck.splice(indexOfToBeAddedCard, 1);
+                hand.push(blackjackDeck[indexOfToBeAddedCard]);
+                blackjackDeck.splice(indexOfToBeAddedCard, 1);
             }
 
             function getSumOfHand(hand: number[]): number {
                 let sum = 0;
                 let sortedDeck = hand.toSorted();
                 sortedDeck.forEach(value => {
-                    if (sum > 21 && value == 11) value = 1
-                    sum += value;
+                    if (sum + value > 21 && value == 11) {
+                        sum += 1;
+                    } else sum += value;
                 });
 
                 return sum;
             }
 
             function playerHit() {
-                addCardToHand(playerHand, blackjackDeck);
+                addCardToHand(playerHand);
                 if (isBust(playerHand)) {
                     playerLost();
                 } else updateEmbedValues();
@@ -171,7 +174,7 @@ export const command: SlashCommand = {
 
             async function playerStand() {
                 while (getSumOfHand(dealerHand) <= 16) {
-                    addCardToHand(dealerHand, blackjackDeck)
+                    addCardToHand(dealerHand)
 
                 }
                 if (isBust(dealerHand)) {
@@ -239,6 +242,21 @@ export const command: SlashCommand = {
                     playerWon(betAmount * 2);
                 } else {
                     playerLost();
+                }
+
+            }
+
+            function checkPlayerHasBlackJack() {
+
+                const playerHandSum = getSumOfHand(playerHand);
+
+                if (playerHandSum == 21) {
+                    addCardToHand(dealerHand);
+                    updateEmbedValues();
+                    const dealerHandSum = getSumOfHand(dealerHand);
+                    if (playerHandSum == dealerHandSum) {
+                        playerLost();
+                    } else playerWon(betAmount * 1.5);
                 }
 
             }

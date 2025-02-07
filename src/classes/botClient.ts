@@ -34,7 +34,7 @@ export default class BotClient {
          await this.db.connect(config.mongoUri)
             .then(() =>  {
                 this.connectedToDb = true;
-                console.log(AnsiEscapeColors.Green + 'Connected to db!' + AnsiEscapeColors.Reset)
+                console.info(AnsiEscapeColors.Green + 'Connected to db!' + AnsiEscapeColors.Reset);
             })
             .catch(error => console.error(AnsiEscapeColors.Red + `Could not connect to db: ${error}` + AnsiEscapeColors.Reset));
 

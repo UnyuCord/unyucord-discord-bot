@@ -48,7 +48,7 @@ export const command: SlashCommand = {
                 });
 
             dbUserEntry.ahn -= betAmount;
-            dbUserEntry.save();
+            await dbUserEntry.save();
 
             const deck: number[] = [
                 2, 2, 2, 2,
@@ -203,7 +203,7 @@ export const command: SlashCommand = {
 
                 if (dbUserEntry) {
                     dbUserEntry.ahn += wonAmount;
-                    dbUserEntry.save();
+                    await dbUserEntry.save();
                     sendEndOfGameEmbed();
                 } else {
                     sendErrorEmbedCustomMessage(interaction, `Error with the database!`);
@@ -219,7 +219,7 @@ export const command: SlashCommand = {
 
                 if (dbUserEntry) {
                     dbUserEntry.ahn += betAmount;
-                    dbUserEntry.save();
+                    await dbUserEntry.save();
                     sendEndOfGameEmbed();
                 } else {
                     sendErrorEmbedCustomMessage(interaction, `Error with the database!`);

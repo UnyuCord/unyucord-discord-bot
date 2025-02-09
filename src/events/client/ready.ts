@@ -1,6 +1,7 @@
 import {EventData} from "../../interfaces/eventData";
 import {Events} from "discord.js";
 import {botClient} from "../../index";
+import {AnsiEscapeColors} from "../../resources/ansiEscapeColors";
 
 
 export const eventData: EventData = {
@@ -12,7 +13,7 @@ export const eventData: EventData = {
         if (botClient.client.user) {
             botClient.client.user.setActivity('Hi! I am BongBong Lobotomy Corporation!!!');
             botClient.client.user.setStatus('dnd');
-            console.info('Client ready!');
+            console.info(AnsiEscapeColors.Green + 'Client ready!' + AnsiEscapeColors.Reset);
         }
 
     }

@@ -1,7 +1,8 @@
-import { readdirSync } from "fs";
+import {readdirSync} from "fs";
 import * as path from "path";
-import { botClient } from "../index";
-import { EventData } from "src/interfaces/eventData";
+import {botClient} from "../index";
+import {EventData} from "src/interfaces/eventData";
+import {AnsiEscapeColors} from "../resources/ansiEscapeColors";
 
 export function registerEvents() {
 
@@ -30,8 +31,8 @@ export function registerEvents() {
                 });
             }
         });
-        console.info(`Finished reading folder ${eventFolder}!`);
+        console.info(AnsiEscapeColors.Green + `Finished reading folder ${eventFolder}!` + AnsiEscapeColors.Reset);
     });
 
-    console.info('Finished reading events!');
+    console.info(AnsiEscapeColors.Green + 'Finished reading events!' + AnsiEscapeColors.Reset);
 }

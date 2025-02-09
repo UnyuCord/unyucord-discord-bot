@@ -79,7 +79,10 @@ export const command: SlashCommand = {
                     components: [googleSearchActionRow]
                 });
 
-                const searchButtonCollector = originalMessage.createMessageComponentCollector({componentType: ComponentType.Button, time: 20000});
+                const searchButtonCollector = originalMessage.createMessageComponentCollector({
+                    componentType: ComponentType.Button,
+                    time: 20000
+                });
 
                 searchButtonCollector.on('collect', async (collectedInteraction: CommandInteraction) => {
 
@@ -87,9 +90,8 @@ export const command: SlashCommand = {
 
                     const button = collectedInteraction as ButtonInteraction
 
-                   searchButtonCollector.resetTimer()
-
                     if (button.user.id !== interaction.user.id) return;
+                    searchButtonCollector.resetTimer()
 
                     switch (button.customId) {
                         case 'googleSearchPrevious':
@@ -125,8 +127,8 @@ export const command: SlashCommand = {
                 });
 
                 searchButtonCollector.on('end', () => {
-                   googleSearchEmbed.setFooter({text: `Images for ${query} | Search timed out`});
-                   originalMessage.edit({embeds: [googleSearchEmbed], components: []});
+                    googleSearchEmbed.setFooter({text: `Images for ${query} | Search timed out`});
+                    originalMessage.edit({embeds: [googleSearchEmbed], components: []});
                 });
 
             });

@@ -1,4 +1,4 @@
-import {SlashCommand} from "../interfaces/slashCommand";
+import { SlashCommand } from "../interfaces/slashCommand";
 import {
     ActionRowBuilder,
     ButtonBuilder,
@@ -12,9 +12,9 @@ import {
     SlashCommandBuilder,
     SlashCommandNumberOption
 } from "discord.js";
-import {userModel} from "../db/schemas/userSchema";
+import { userModel } from "../db/schemas/userSchema";
 import config from '../resources/config.json';
-import {sendErrorEmbedCustomMessage} from "../handlers/errorHandler";
+import { sendErrorEmbedCustomMessage } from "../handlers/errorHandler";
 
 export const command: SlashCommand = {
     data: new SlashCommandBuilder()
@@ -29,9 +29,9 @@ export const command: SlashCommand = {
     async run(interaction: CommandInteraction) {
 
         if (interaction.isChatInputCommand()) {
-            const chatInputInteraction = interaction as ChatInputCommandInteraction
+            const chatInputInteraction = interaction as ChatInputCommandInteraction;
 
-            const dbUserEntry = await userModel.findOne({discordId: chatInputInteraction.user.id});
+            const dbUserEntry = await userModel.findOne({ discordId: chatInputInteraction.user.id });
             const betAmountFromInteraction = chatInputInteraction.options.getNumber('bet');
             let betAmount: number = 0;
             if (betAmountFromInteraction) {
@@ -76,7 +76,12 @@ export const command: SlashCommand = {
                     new ButtonBuilder()
                         .setCustomId('stand')
                         .setLabel('Stand')
-                        .setStyle(ButtonStyle.Secondary)
+                        .setStyle(ButtonStyle.Secondary),
+                    new ButtonBuilder()
+                        .setCustomId('surrender')
+                        .setLabel('Surrender')
+                        .setStyle(ButtonStyle.Danger)
+
                 );
 
             const playerHand: number[] = [];
@@ -96,18 +101,18 @@ export const command: SlashCommand = {
             const playEmbed = new EmbedBuilder()
                 .setTitle(`Blackjack game with ${interaction.user.displayName}`)
                 .setColor(`#${config.bongColor}`)
-                .setFooter({text:`Bet: ${betAmount}${config.currencyName}`})
+                .setFooter({ text: `Bet: ${betAmount}${config.currencyName}` })
                 .addFields(
-                    {name: 'Dealer\'s hand', value: `${getSumOfHand(dealerHand)} (${dealerHand.toString()})`},
-                    {name: 'Player\'s hand', value: `${getSumOfHand(playerHand)} (${playerHand.toString()})`},
-                )
+                    { name: 'Dealer\'s hand', value: `${getSumOfHand(dealerHand)} (${dealerHand.toString()})` },
+                    { name: 'Player\'s hand', value: `${getSumOfHand(playerHand)} (${playerHand.toString()})` },
+                );
 
             const originalMessage = await interaction.reply
-            ({
-                fetchReply: true,
-                embeds: [playEmbed],
-                components: [playOptionsRow]
-            });
+                ({
+                    fetchReply: true,
+                    embeds: [playEmbed],
+                    components: [playOptionsRow]
+                });
 
             const playInteractionCollector = originalMessage.createMessageComponentCollector({
                 componentType: ComponentType.Button,
@@ -130,6 +135,10 @@ export const command: SlashCommand = {
                     case 'stand':
                         await playerStand();
                         break;
+                    case 'surrender':
+                        await playerSurrendered();
+                        break;
+
                 }
                 await button.deferUpdate();
             });
@@ -148,7 +157,7 @@ export const command: SlashCommand = {
             }
 
             function addCardToHand(hand: number[]) {
-                const indexOfToBeAddedCard = Math.floor(Math.random() * deck.length - 1)
+                const indexOfToBeAddedCard = Math.floor(Math.random() * deck.length - 1);
                 hand.push(blackjackDeck[indexOfToBeAddedCard]);
                 blackjackDeck.splice(indexOfToBeAddedCard, 1);
             }
@@ -174,12 +183,29 @@ export const command: SlashCommand = {
 
             async function playerStand() {
                 while (getSumOfHand(dealerHand) <= 16) {
-                    addCardToHand(dealerHand)
+                    addCardToHand(dealerHand);
 
                 }
                 if (isBust(dealerHand)) {
                     await playerWon(betAmount * 2);
                 } else determineIfGameFinished();
+            }
+
+            async function playerSurrendered() {
+                playEmbed
+                    .setColor(Colors.Yellow)
+                    .setDescription(`You surrendered, you get ${betAmount / 2}${config.currencyName} back!`)
+                    .setFooter({ text: 'Game has ended!' });
+
+                if (dbUserEntry) {
+                    dbUserEntry.ahn += betAmount / 2;
+                    await dbUserEntry.save();
+                } else {
+                    sendErrorEmbedCustomMessage(interaction, 'Error with the database!');
+                    playInteractionCollector.stop('Database error');
+                }
+
+                sendEndOfGameEmbed();
             }
 
             function isBust(hand: number[]) {
@@ -190,7 +216,7 @@ export const command: SlashCommand = {
                 playEmbed
                     .setColor(Colors.Red)
                     .setDescription(`You lost ${betAmount}${config.currencyName}!`)
-                    .setFooter({text: 'Game has ended!'});
+                    .setFooter({ text: 'Game has ended!' });
 
                 sendEndOfGameEmbed();
             }
@@ -199,7 +225,7 @@ export const command: SlashCommand = {
                 playEmbed
                     .setColor(Colors.Green)
                     .setDescription(`You won ${wonAmount}${config.currencyName}!`)
-                    .setFooter({text: 'Game has ended!'});
+                    .setFooter({ text: 'Game has ended!' });
 
                 if (dbUserEntry) {
                     dbUserEntry.ahn += wonAmount;
@@ -215,7 +241,7 @@ export const command: SlashCommand = {
                 playEmbed
                     .setColor(Colors.Yellow)
                     .setDescription(`It's a tie! You got your ${betAmount}${config.currencyName} back!`)
-                    .setFooter({text: 'Game has ended!'});
+                    .setFooter({ text: 'Game has ended!' });
 
                 if (dbUserEntry) {
                     dbUserEntry.ahn += betAmount;
@@ -263,19 +289,37 @@ export const command: SlashCommand = {
 
             function sendEndOfGameEmbed() {
                 updateEmbedValues();
-                originalMessage.edit({embeds: [playEmbed], components: []});
+                originalMessage.edit({ embeds: [playEmbed], components: [] });
                 playInteractionCollector.stop('Game ended');
             }
 
             function updateEmbedValues() {
                 playEmbed.setFields(
-                    {name: 'Dealer\'s hand', value: `${getSumOfHand(dealerHand)} (${dealerHand.toString()})`},
-                    {name: 'Player\'s hand', value: `${getSumOfHand(playerHand)} (${playerHand.toString()})`}
+                    { name: 'Dealer\'s hand', value: `${getSumOfHand(dealerHand)} (${dealerHand.toString()})` },
+                    { name: 'Player\'s hand', value: `${getSumOfHand(playerHand)} (${playerHand.toString()})` }
                 );
-                originalMessage.edit({embeds: [playEmbed]})
+
+                playOptionsRow.setComponents(
+                    new ButtonBuilder()
+                        .setCustomId('hit')
+                        .setLabel('Hit')
+                        .setStyle(ButtonStyle.Primary),
+                    new ButtonBuilder()
+                        .setCustomId('stand')
+                        .setLabel('Stand')
+                        .setStyle(ButtonStyle.Secondary),
+                    new ButtonBuilder()
+                        .setCustomId('surrender')
+                        .setDisabled(playerHand.length != 2)
+                        .setLabel('Surrender')
+                        .setStyle(ButtonStyle.Danger)
+
+                );
+
+                originalMessage.edit({ embeds: [playEmbed], components: [playOptionsRow] });
             }
 
 
         } else return;
     }
-}
+};

@@ -21,7 +21,7 @@ export const eventData: EventData = {
 
             if (!botClient.connectedToDb) return sendErrorEmbedCustomMessage(interaction,
                 'WAGHHH AN ABNORMALITY HAS BREACHED CONTAINMENT!!! \n(***No database connection!***)');
-
+          
             await checkDbProfileExists(interaction.user.id);
         }
 

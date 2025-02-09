@@ -29,7 +29,6 @@ export const command: SlashCommand = {
             if (botClient.connectedToDb) {
                 const result = await checkDbProfileExists(interaction.user.id);
                 ahn = `${result?.ahn}` || '-';
-
             }
 
 

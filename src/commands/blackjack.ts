@@ -135,6 +135,7 @@ export const command: SlashCommand = {
                     case 'stand':
                         await playerStand();
                         break;
+
                     case 'surrender':
                         await playerSurrendered();
                         break;
@@ -157,14 +158,14 @@ export const command: SlashCommand = {
             }
 
             function addCardToHand(hand: number[]) {
-                const indexOfToBeAddedCard = Math.floor(Math.random() * deck.length - 1);
+                const indexOfToBeAddedCard = Math.floor(Math.random() * deck.length);
                 hand.push(blackjackDeck[indexOfToBeAddedCard]);
                 blackjackDeck.splice(indexOfToBeAddedCard, 1);
             }
 
             function getSumOfHand(hand: number[]): number {
                 let sum = 0;
-                let sortedDeck = hand.toSorted();
+                let sortedDeck = hand.toSorted((a, b) => a - b);
                 sortedDeck.forEach(value => {
                     if (sum + value > 21 && value == 11) {
                         sum += 1;

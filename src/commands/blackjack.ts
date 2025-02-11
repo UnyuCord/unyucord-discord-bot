@@ -1,4 +1,4 @@
-import { SlashCommand } from "../interfaces/slashCommand";
+import {SlashCommand} from "../interfaces/slashCommand";
 import {
     ActionRowBuilder,
     ButtonBuilder,
@@ -10,17 +10,17 @@ import {
     ComponentType,
     EmbedBuilder,
     SlashCommandBuilder,
-    SlashCommandNumberOption
+    SlashCommandIntegerOption
 } from "discord.js";
-import { userModel } from "../db/schemas/userSchema";
+import {userModel} from "../db/schemas/userSchema";
 import config from '../resources/config.json';
-import { sendErrorEmbedCustomMessage } from "../handlers/errorHandler";
+import {sendErrorEmbedCustomMessage} from "../handlers/errorHandler";
 
 export const command: SlashCommand = {
     data: new SlashCommandBuilder()
         .setName('blackjack')
         .setDescription('Play Blackjack with BongBong!')
-        .addNumberOption(new SlashCommandNumberOption()
+        .addIntegerOption(new SlashCommandIntegerOption()
             .setName('bet')
             .setDescription('The amount of currency you want to bet.')
             .setRequired(true)
@@ -32,11 +32,7 @@ export const command: SlashCommand = {
             const chatInputInteraction = interaction as ChatInputCommandInteraction;
 
             const dbUserEntry = await userModel.findOne({ discordId: chatInputInteraction.user.id });
-            const betAmountFromInteraction = chatInputInteraction.options.getNumber('bet');
-            let betAmount: number = 0;
-            if (betAmountFromInteraction) {
-                betAmount = betAmountFromInteraction as number;
-            } else return;
+            const betAmount = chatInputInteraction.options.getNumber('bet', true);
 
 
             if (!dbUserEntry || !betAmount) return;
@@ -264,7 +260,7 @@ export const command: SlashCommand = {
                         playerLost();
                     } else tie();
                 } else if (playerHand.length == 2 && playerHandSum == 21) {
-                    playerWon(betAmount * 1.5);
+                    playerWon(Math.ceil(betAmount * 1.5));
                 } else if (playerHandSum > dealerHandSum) {
                     playerWon(betAmount * 2);
                 } else {
@@ -283,7 +279,7 @@ export const command: SlashCommand = {
                     const dealerHandSum = getSumOfHand(dealerHand);
                     if (playerHandSum == dealerHandSum) {
                         playerLost();
-                    } else playerWon(betAmount * 1.5);
+                    } else playerWon(Math.ceil(betAmount * 1.5));
                 }
 
             }

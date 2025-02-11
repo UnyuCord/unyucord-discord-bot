@@ -2,7 +2,7 @@ import {SlashCommand} from "../interfaces/slashCommand";
 import {
     ChatInputCommandInteraction,
     SlashCommandBuilder,
-    SlashCommandNumberOption,
+    SlashCommandIntegerOption,
     SlashCommandUserOption
 } from "discord.js";
 import {userModel} from "../db/schemas/userSchema";
@@ -17,7 +17,7 @@ export const command: SlashCommand = {
             .setName('user')
             .setDescription('The recipient of the currency')
             .setRequired(true))
-        .addNumberOption(new SlashCommandNumberOption()
+        .addIntegerOption(new SlashCommandIntegerOption()
             .setName('amount')
             .setDescription('The amount of currency to be given.')
             .setRequired(true)),

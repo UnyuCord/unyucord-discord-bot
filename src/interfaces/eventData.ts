@@ -1,7 +1,5 @@
-import {Events} from "discord.js";
-
 export interface EventData {
-    name: Events | string;
+    name: string;
     once: Boolean;
     execute: (...args: any) => void;
 

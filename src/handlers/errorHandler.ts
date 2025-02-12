@@ -1,4 +1,5 @@
 import {CommandInteraction, EmbedBuilder, HTTPError} from "discord.js";
+import {logError} from "./logHandler";
 
 export function sendErrorEmbed(interaction: CommandInteraction, error: any) {
 
@@ -17,7 +18,8 @@ export function sendErrorEmbed(interaction: CommandInteraction, error: any) {
         .setDescription(errorDescription)
         .setFooter({text: 'Blame Nikki for this...'})
 
-    interaction.reply({embeds: [errorEmbed]});
+    logError(error);
+    interaction.reply({embeds: [errorEmbed], ephemeral: true});
 }
 
 export function sendErrorEmbedCustomMessage(interaction: CommandInteraction, errorMessage: string) {
@@ -29,5 +31,6 @@ export function sendErrorEmbedCustomMessage(interaction: CommandInteraction, err
         .setDescription(errorMessage)
         .setFooter({text: 'Blame Nikki for this...'})
 
-    interaction.reply({embeds: [errorEmbed]});
+    logError(errorMessage);
+    interaction.reply({embeds: [errorEmbed], ephemeral: true});
 }

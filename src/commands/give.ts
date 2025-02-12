@@ -28,7 +28,7 @@ export const command: SlashCommand = {
 
         const chatInputCommandInteraction = interaction as ChatInputCommandInteraction;
         const recipientUser = chatInputCommandInteraction.options.getUser('user', true);
-        const amount = chatInputCommandInteraction.options.getNumber('amount', true);
+        const amount = chatInputCommandInteraction.options.getInteger('amount', true);
         const senderDbUser = await userModel.findOne({discordId: interaction.user.id});
         const recipientDbUser = await checkDbProfileExists(recipientUser.id);
 

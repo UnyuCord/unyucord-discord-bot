@@ -32,7 +32,7 @@ export const command: SlashCommand = {
             const chatInputInteraction = interaction as ChatInputCommandInteraction;
 
             const dbUserEntry = await userModel.findOne({ discordId: chatInputInteraction.user.id });
-            const betAmount = chatInputInteraction.options.getNumber('bet', true);
+            const betAmount = chatInputInteraction.options.getInteger('bet', true);
 
 
             if (!dbUserEntry || !betAmount) return;
@@ -189,13 +189,16 @@ export const command: SlashCommand = {
             }
 
             async function playerSurrendered() {
+
+                const halvedBet = Math.ceil(betAmount / 2);
+
                 playEmbed
                     .setColor(Colors.Yellow)
-                    .setDescription(`You surrendered, you get ${betAmount / 2}${config.currencyName} back!`)
+                    .setDescription(`You surrendered, you get ${halvedBet}${config.currencyName} back!`)
                     .setFooter({ text: 'Game has ended!' });
 
                 if (dbUserEntry) {
-                    dbUserEntry.ahn += betAmount / 2;
+                    dbUserEntry.ahn += Math.ceil(halvedBet);
                     await dbUserEntry.save();
                 } else {
                     sendErrorEmbedCustomMessage(interaction, 'Error with the database!');

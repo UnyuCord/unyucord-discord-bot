@@ -14,6 +14,7 @@ import axios from "axios";
 import {GoogleSearchResponse} from "../interfaces/googleSearchResponse";
 import config from '../resources/config.json'
 import * as https from "https";
+import {logError} from "../handlers/logHandler";
 
 
 export const command: SlashCommand = {
@@ -104,7 +105,7 @@ export const command: SlashCommand = {
                             imageIndex = Math.floor(Math.random() * response.data.items.length);
                             break;
                         default:
-                            console.error('uhh... this isnt supposed to happen right?')
+                            logError('uhh... this isnt supposed to happen right?')
                             imageIndex = 0;
                             break;
                     }

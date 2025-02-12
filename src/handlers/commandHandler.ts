@@ -1,20 +1,21 @@
-import { readdirSync } from 'fs'
+import {readdirSync} from 'fs'
 import * as path from "path";
-import { SlashCommand } from "../interfaces/slashCommand";
-import { Collection } from "discord.js";
+import {SlashCommand} from "../interfaces/slashCommand";
+import {Collection} from "discord.js";
+import {logInfo, logSuccess} from "./logHandler";
 
 export async function getSlashCommands(): Promise<Collection<string, SlashCommand>> {
-    console.info('Reading commands...');
+    logInfo('Reading commands...');
 
     const commandFiles = readdirSync(path.join(__dirname, '../commands'));
     const slashCommandCollection = new Collection<string, SlashCommand>();
 
     for (const fileName of commandFiles) {
-        console.info(`Reading command ${fileName}...`);
+        logInfo(`Reading command ${fileName}...`);
         const { command } = await import(path.join(__dirname, `../commands/${fileName}`)) as { command: SlashCommand };
         slashCommandCollection.set(command.data.name, command);
     }
 
-    console.info('Finished reading commands!');
+    logSuccess('Finished reading commands!');
     return slashCommandCollection;
 }

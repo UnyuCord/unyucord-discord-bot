@@ -1,8 +1,9 @@
 import BotClient from "./classes/botClient";
 import process from "process";
+import {logError} from "./handlers/logHandler";
 
 process.on('unhandledRejection', error => {
-    console.error('Unhandled promise rejection:', error);
+    logError(`Unhandled Rejection: ${error}`);
 });
 
 export const botClient = new BotClient();

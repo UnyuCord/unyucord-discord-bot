@@ -4,7 +4,7 @@ import {SlashCommand} from "../interfaces/slashCommand";
 import {getSlashCommands} from "../handlers/commandHandler";
 import {registerEvents} from "../handlers/eventHandler";
 import {Mongoose} from "mongoose";
-import {AnsiEscapeColors} from "../resources/ansiEscapeColors";
+import {logError, logInfo, logSuccess} from "../handlers/logHandler";
 
 export default class BotClient {
 
@@ -22,23 +22,23 @@ export default class BotClient {
 
     async start() {
 
-        console.info('Starting bot...');
+        logInfo('Starting bot...');
 
         registerEvents();
 
         await getSlashCommands()
             .then(slashCommands => this.slashCommands = slashCommands)
-            .catch(error => console.error(AnsiEscapeColors.Red + error + AnsiEscapeColors.Reset));
+            .catch(error => logError(error));
 
-        console.info('Connecting to db...');
+        logInfo('Connecting to db...');
          await this.db.connect(config.mongoUri)
             .then(() =>  {
                 this.connectedToDb = true;
-                console.info(AnsiEscapeColors.Green + 'Connected to db!' + AnsiEscapeColors.Reset);
+                logSuccess('Connected to db!');
             })
-            .catch(error => console.error(AnsiEscapeColors.Red + `Could not connect to db: ${error}` + AnsiEscapeColors.Reset));
+            .catch(error => logError(`Could not connect to db: ${error}`));
 
-        console.info(`Logging into Discord client...`);
+        logInfo(`Logging into Discord client...`);
         await this.client.login(config.token);
     }
 }

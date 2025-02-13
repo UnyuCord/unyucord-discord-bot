@@ -19,7 +19,7 @@ export function sendErrorEmbed(interaction: CommandInteraction, error: any) {
         .setFooter({text: 'Blame Nikki for this...'})
 
     logError(error);
-    interaction.reply({embeds: [errorEmbed], ephemeral: true});
+    void interaction.reply({embeds: [errorEmbed], ephemeral: true});
 }
 
 export function sendErrorEmbedCustomMessage(interaction: CommandInteraction, errorMessage: string) {
@@ -29,8 +29,17 @@ export function sendErrorEmbedCustomMessage(interaction: CommandInteraction, err
         .setTitle(':boom: BONGBONG HAS JUST EXPLODED!!! :boom:')
         .setImage("https://media.tenor.com/--tErbWBQ3AAAAAi/bongbong-explosion.gif")
         .setDescription(errorMessage)
-        .setFooter({text: 'Blame Nikki for this...'})
+        .setFooter({text: 'Blame Nikki for this...'});
 
     logError(errorMessage);
-    interaction.reply({embeds: [errorEmbed], ephemeral: true});
+    void interaction.reply({embeds: [errorEmbed], ephemeral: true});
+}
+
+export function sendWarnEmbed(interaction: CommandInteraction, message: string) {
+    const warnEmbed = new EmbedBuilder()
+        .setColor('Yellow')
+        .setTitle('Something went wrong!')
+        .setDescription(message);
+
+    void interaction.reply({embeds: [warnEmbed], ephemeral: true});
 }

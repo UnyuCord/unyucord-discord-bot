@@ -48,7 +48,7 @@ export const command: SlashCommand = {
                 {name: 'Discord API latency:', value: `${discordMs} ${discordCircle}`}
             )
         interaction.reply({content: 'Bong...'}).then(() => {
-            interaction.editReply({content: 'BongBong!', embeds: [latencyEmbed]})
+            void interaction.editReply({content: 'BongBong!', embeds: [latencyEmbed]})
         });
     }
 

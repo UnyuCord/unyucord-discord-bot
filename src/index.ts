@@ -7,4 +7,4 @@ process.on('unhandledRejection', error => {
 });
 
 export const botClient = new BotClient();
-botClient.start();
+void botClient.start();

@@ -3,7 +3,6 @@ import {Events, Interaction} from "discord.js";
 import {botClient} from "../../index";
 import {sendErrorEmbed, sendErrorEmbedCustomMessage} from "../../handlers/errorHandler";
 import {checkDbProfileExists} from "../../db/dbHandler";
-import {types} from 'util';
 
 export const eventData: EventData = {
 
@@ -21,14 +20,12 @@ export const eventData: EventData = {
 
             if (!botClient.connectedToDb) return sendErrorEmbedCustomMessage(interaction,
                 'WAGHHH AN ABNORMALITY HAS BREACHED CONTAINMENT!!! \n(***No database connection!***)');
-          
+
             await checkDbProfileExists(interaction.user.id);
         }
 
         try {
-            if (types.isAsyncFunction(command.run)) {
-                await command.run(interaction);
-            } else command.run(interaction);
+            command.run(interaction);
         } catch (error) {
             sendErrorEmbed(interaction, error);
         }

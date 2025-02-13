@@ -9,6 +9,6 @@ export const eventData: EventData = {
     execute(message: Message) {
         if (!message.content.toLowerCase().includes('keks') || config.keksImages.length < 1) return;
 
-        message.reply(config.keksImages[Math.floor(Math.random() * config.keksImages.length)]);
+        void message.reply(config.keksImages[Math.floor(Math.random() * config.keksImages.length)]);
     }
 }

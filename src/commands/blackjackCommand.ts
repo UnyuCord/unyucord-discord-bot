@@ -2,9 +2,7 @@ import {SlashCommand} from "../interfaces/slashCommand";
 import {
     ActionRowBuilder,
     ButtonBuilder,
-    ButtonInteraction,
     ButtonStyle,
-    ChatInputCommandInteraction,
     Colors,
     CommandInteraction,
     ComponentType,
@@ -28,20 +26,18 @@ export const command: SlashCommand = {
     dbRequired: true,
     async run(interaction: CommandInteraction) {
 
-        if (!interaction.isChatInputCommand()) return
+        if (!interaction.isChatInputCommand()) return;
 
-        const chatInputInteraction = interaction as ChatInputCommandInteraction;
-        const dbUserEntry = await userModel.findOne({discordId: chatInputInteraction.user.id});
-        const betAmount = chatInputInteraction.options.getInteger('bet', true);
+        const dbUserEntry = await userModel.findOne({discordId: interaction.user.id});
+        const betAmount = interaction.options.getInteger('bet', true);
 
 
         if (!dbUserEntry || !betAmount) return;
 
-        if ((dbUserEntry.ahn < betAmount)) return interaction.reply(
-            {
-                content: `You do not have enough ${config.currencyName}!`,
-                ephemeral: true
-            });
+        if ((dbUserEntry.ahn < betAmount)) return interaction.reply({
+            content: `You do not have enough ${config.currencyName}!`,
+            ephemeral: true
+        });
 
         dbUserEntry.ahn -= betAmount;
         await dbUserEntry.save();
@@ -102,8 +98,7 @@ export const command: SlashCommand = {
                 {name: 'Player\'s hand', value: `${getSumOfHand(playerHand)} (${playerHand.toString()})`},
             );
 
-        const originalMessage = await interaction.reply
-        ({
+        const originalMessage = await interaction.reply({
             fetchReply: true,
             embeds: [playEmbed],
             components: [playOptionsRow]
@@ -114,15 +109,13 @@ export const command: SlashCommand = {
             time: 120000
         });
 
-        playInteractionCollector.on('collect', async (collectedInteraction) => {
-            if (!collectedInteraction.isButton()) return;
+        playInteractionCollector.on('collect', async (buttonInteraction) => {
+            if (!buttonInteraction.isButton()) return;
 
-            const button = collectedInteraction as ButtonInteraction;
-
-            if (button.user.id !== interaction.user.id) return;
+            if (buttonInteraction.user.id !== interaction.user.id) return;
             playInteractionCollector.resetTimer();
 
-            switch (button.customId) {
+            switch (buttonInteraction.customId) {
                 case 'hit':
                     playerHit();
                     break;
@@ -136,7 +129,7 @@ export const command: SlashCommand = {
                     break;
 
             }
-            await button.deferUpdate();
+            await buttonInteraction.deferUpdate();
         });
 
         playInteractionCollector.on('end', () => {

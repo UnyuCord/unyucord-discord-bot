@@ -8,7 +8,7 @@ export const command: SlashCommand = {
         .setName('bongbong')
         .setDescription('Random bongbong gif!'),
 
-    async run(interaction: CommandInteraction) {
+    run(interaction: CommandInteraction) {
 
         const embed = new EmbedBuilder()
             .setTitle('Bongbong!')
@@ -16,7 +16,7 @@ export const command: SlashCommand = {
             .setImage(config.bongGifs[Math.floor(Math.random() * config.bongGifs.length)])
             .setColor(`#${config.bongColor}`)
 
-        await interaction.reply({embeds: [embed]});
+         void interaction.reply({embeds: [embed]});
     }
 
 }

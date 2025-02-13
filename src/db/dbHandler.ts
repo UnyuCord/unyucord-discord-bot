@@ -1,6 +1,7 @@
 import {userModel} from "./schemas/userSchema";
+import {musicChannelModel} from "./schemas/musicChannelSchema";
 
-export async function checkDbProfileExists(discordUserId: String) {
+export async function checkDbProfileExists(discordUserId: string) {
 
     let discordUserProfile = await userModel.findOne({discordId: discordUserId});
   
@@ -13,4 +14,9 @@ export async function checkDbProfileExists(discordUserId: String) {
     }
 
     return discordUserProfile;
+}
+
+export async function checkMusicChannelSet(guildId: string) {
+
+    return (await musicChannelModel.findOne({guildId: guildId}));
 }

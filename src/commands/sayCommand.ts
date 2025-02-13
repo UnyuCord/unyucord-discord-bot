@@ -1,10 +1,5 @@
 import {SlashCommand} from "../interfaces/slashCommand";
-import {
-    ChatInputCommandInteraction,
-    CommandInteraction,
-    SlashCommandBuilder,
-    SlashCommandStringOption
-} from "discord.js";
+import {CommandInteraction, SlashCommandBuilder, SlashCommandStringOption} from "discord.js";
 
 
 export const command: SlashCommand = {
@@ -21,14 +16,12 @@ export const command: SlashCommand = {
 
     run: (interaction: CommandInteraction) => {
 
-        if (interaction.isChatInputCommand()) {
+        if (!interaction.isChatInputCommand()) return;
 
-            const commandInteraction = interaction as ChatInputCommandInteraction;
-            const message = commandInteraction.options.getString('message');
+        const message = interaction.options.getString('message');
 
-            if (message) {
-                interaction.reply(message);
-            }
+        if (message) {
+            void interaction.reply(message);
         }
     }
 

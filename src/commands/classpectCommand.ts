@@ -19,6 +19,6 @@ export const command: SlashCommand = {
             .setTitle('YOUR CLASSPECT IS...')
             .setDescription(`${classpectClass} of ${classpectAspect}, ${classpectBlood}, ${classpectMoon}`);
 
-        interaction.reply({embeds: [classpectEmbed]});
+        void interaction.reply({embeds: [classpectEmbed]});
     }
 }

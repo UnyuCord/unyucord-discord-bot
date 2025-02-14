@@ -1,6 +1,6 @@
 import {SlashCommand} from "../interfaces/slashCommand";
 import {CommandInteraction, SlashCommandBuilder} from "discord.js";
-import {DiscordGatewayAdapterCreator, joinVoiceChannel} from "@discordjs/voice";
+import {DiscordGatewayAdapterCreator, getVoiceConnection, joinVoiceChannel} from "@discordjs/voice";
 
 export const command: SlashCommand = {
     data: new SlashCommandBuilder()
@@ -18,6 +18,8 @@ export const command: SlashCommand = {
 export async function connectToSenderVc(interaction: CommandInteraction) {
 
     if (!interaction.guild) return;
+    const existingVoiceConnectionInGuild = getVoiceConnection(interaction.guild.id);
+    if (existingVoiceConnectionInGuild) return existingVoiceConnectionInGuild;
 
     const channels = await interaction.guild.channels.fetch();
     const userVoiceChannel = channels

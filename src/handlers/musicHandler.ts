@@ -5,6 +5,8 @@ import {AudioPlayer} from "@discordjs/voice";
 export const guildQueues: Collection<Snowflake, string[]> = new Collection<Snowflake, string[]>();
 // GuildId, AudioPlayer
 export const audioPlayers: Collection<Snowflake, AudioPlayer> = new Collection<Snowflake, AudioPlayer>();
+// GuildId, Timeout
+export const idleTimeOut: Collection<Snowflake, NodeJS.Timeout> = new Collection<Snowflake, NodeJS.Timeout>();
 
 export function addToQueue(guildId: Snowflake, videoId: string) {
     if (!guildQueues.has(guildId)) {

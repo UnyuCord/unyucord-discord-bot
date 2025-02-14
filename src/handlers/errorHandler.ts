@@ -19,7 +19,9 @@ export function sendErrorEmbed(interaction: CommandInteraction, error: any) {
         .setFooter({text: 'Blame Nikki for this...'})
 
     logError(error);
-    void interaction.reply({embeds: [errorEmbed], ephemeral: true});
+    if (interaction.replied) {
+        void interaction.followUp({embeds: [errorEmbed], ephemeral: true});
+    } else void interaction.reply({embeds: [errorEmbed], ephemeral: true});
 }
 
 export function sendErrorEmbedCustomMessage(interaction: CommandInteraction, errorMessage: string) {
@@ -32,7 +34,9 @@ export function sendErrorEmbedCustomMessage(interaction: CommandInteraction, err
         .setFooter({text: 'Blame Nikki for this...'});
 
     logError(errorMessage);
-    void interaction.reply({embeds: [errorEmbed], ephemeral: true});
+    if (interaction.replied) {
+        void interaction.followUp({embeds: [errorEmbed], ephemeral: true});
+    } else void interaction.reply({embeds: [errorEmbed], ephemeral: true});
 }
 
 export function sendWarnEmbed(interaction: CommandInteraction, message: string) {
@@ -41,5 +45,7 @@ export function sendWarnEmbed(interaction: CommandInteraction, message: string) 
         .setTitle('Something went wrong!')
         .setDescription(message);
 
-    void interaction.reply({embeds: [warnEmbed], ephemeral: true});
+    if (interaction.replied) {
+        void interaction.followUp({embeds: [warnEmbed], ephemeral: true});
+    } else void interaction.reply({embeds: [warnEmbed], ephemeral: true});
 }

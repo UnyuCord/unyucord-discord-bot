@@ -3,6 +3,7 @@ import {Events, Interaction} from "discord.js";
 import {botClient} from "../../index";
 import {sendErrorEmbed, sendErrorEmbedCustomMessage} from "../../handlers/errorHandler";
 import {checkDbProfileExists} from "../../db/dbHandler";
+import {types} from 'util';
 
 export const eventData: EventData = {
 
@@ -25,7 +26,9 @@ export const eventData: EventData = {
         }
 
         try {
-            command.run(interaction);
+            if (types.isAsyncFunction(command.run)) {
+                await command.run(interaction);
+            } else command.run(interaction);
         } catch (error) {
             sendErrorEmbed(interaction, error);
         }

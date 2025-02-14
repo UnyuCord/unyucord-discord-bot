@@ -64,7 +64,6 @@ export const command: SlashCommand = {
 
         if (queue.length == 1) {
             const ongoingIdleTimeout = idleTimeOut.get(interaction.guildId);
-            console.log(ongoingIdleTimeout)
             if (ongoingIdleTimeout) {
                 clearTimeout(ongoingIdleTimeout);
                 idleTimeOut.delete(interaction.guildId);
@@ -78,7 +77,7 @@ export const command: SlashCommand = {
             if (!interaction.guildId || !queue) return;
 
             removeFirstFromQueue(interaction.guildId);
-            console.log(queue);
+
             if (queue.length === 0) {
 
                 const idleTimeOutInMs = 120000;
@@ -135,7 +134,6 @@ export const command: SlashCommand = {
 
         async function disconnect() {
 
-            console.log('Oke im disconnecting :)))');
             const musicChannel = await musicChannelModel.findOne({guildId: interaction.guildId});
 
             if (!interaction.guildId || !musicChannel || !musicChannel.channelId) return;

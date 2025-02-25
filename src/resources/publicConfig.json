@@ -53,5 +53,7 @@
     "I'm tired... ask later...",
     ""
   ],
-  "keksImages": ["Put image uri here"]
+  "keksImages": ["Put image uri here"],
+  "mongoUri": "mongoUri_Here",
+  "currencyName": "shaboingboing"
 }

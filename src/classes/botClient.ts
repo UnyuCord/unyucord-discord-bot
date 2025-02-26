@@ -20,8 +20,10 @@ export default class BotClient {
 
     // CommandName, SlashCommand
     slashCommands: Collection<string, SlashCommand> = new Collection<string, SlashCommand>();
+    //TODO: Decide if db and innertube should be put in their respective handlers
     db: Mongoose = new Mongoose();
     innertube!: Innertube;
+    //TODO: Add events for db disconnects to set this flag to false and vice versa
     connectedToDb = false;
 
     async start() {

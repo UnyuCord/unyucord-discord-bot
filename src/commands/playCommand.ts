@@ -16,6 +16,7 @@ import config from "../resources/config.json";
 import {connectToSenderVc} from "./joinCommand";
 import {checkMusicChannelSet} from "../db/dbHandler";
 import {musicChannelModel} from "../db/schemas/musicChannelSchema";
+import {SongEntry} from "../classes/songEntry";
 
 export const command: SlashCommand = {
     data: new SlashCommandBuilder()
@@ -43,7 +44,7 @@ export const command: SlashCommand = {
         let audioPlayer: AudioPlayer | undefined = audioPlayers.get(interaction.guildId);
         let connection: VoiceConnection | undefined = getVoiceConnection(interaction.guildId);
 
-        addToQueue(interaction.guildId, videoId);
+        addToQueue(interaction.guildId, new SongEntry(interaction.user.username, videoInfo));
 
         const queue = guildQueues.get(interaction.guildId);
 
@@ -68,7 +69,7 @@ export const command: SlashCommand = {
                 clearTimeout(ongoingIdleTimeout);
                 idleTimeOut.delete(interaction.guildId);
             }
-            await playAudio(videoId);
+            await playAudio(queue[0]);
         }
         await interaction.reply({embeds: [addedToQueueEmbed]});
 
@@ -87,24 +88,25 @@ export const command: SlashCommand = {
                 return;
             }
 
-            const nextSongId = queue[0];
+            const nextSongEntry = queue[0];
 
-            if (!nextSongId) return;
+            if (!nextSongEntry) return;
 
-            await playAudio(nextSongId);
+            await playAudio(nextSongEntry);
 
         }
 
-        async function playAudio(videoId: string) {
+        async function playAudio(songEntry: SongEntry) {
 
-            const videoInfo = await botClient.innertube.getBasicInfo(videoId);
-            const streamingData = await botClient.innertube.getStreamingData(videoId);
+            if (!songEntry.videoInfo.basic_info.id) return;
+            const streamingData = await botClient.innertube.getStreamingData(songEntry.videoInfo.basic_info.id);
             const audioStreamUrl = streamingData.url;
             if (!audioStreamUrl) return sendErrorEmbedCustomMessage(interaction, 'Could not get stream audio.');
 
             const playingNowEmbed = new EmbedBuilder()
                 .setColor(`#${config.bongColor}`)
                 .setDescription(`${videoInfo.basic_info.title} is now playing.`)
+                .setFooter({text: `Added by ${songEntry.addedBy}`});
 
             const ffmpegStream = new prism.FFmpeg({
                 args: [

@@ -1,4 +1,4 @@
-import {SlashCommand} from "../interfaces/slashCommand";
+import { SlashCommand } from "../interfaces/slashCommand";
 import {
     ActionRowBuilder,
     ButtonBuilder,
@@ -8,10 +8,11 @@ import {
     SlashCommandBuilder,
     SlashCommandSubcommandBuilder
 } from "discord.js";
-import {audioPlayers, guildQueues} from "../handlers/musicHandler";
-import {sendWarnEmbed} from "../handlers/errorHandler";
-import {AudioPlayerStatus} from "@discordjs/voice";
+import { audioPlayers, guildQueues } from "../handlers/musicHandler";
+import { sendWarnEmbed } from "../handlers/errorHandler";
+import { AudioPlayerStatus } from "@discordjs/voice";
 import config from "../resources/config.json";
+import { format } from "path";
 
 //TODO: WIP showQueue
 export const command: SlashCommand = {
@@ -32,7 +33,7 @@ export const command: SlashCommand = {
             .setDescription('Displays the song queue.')),
     dbRequired: false,
     //TODO: decide if the play command should be put as a subcommand here
-    run: function (interaction: CommandInteraction): any {
+    run: function (interaction: CommandInteraction) {
 
         if (!interaction.isChatInputCommand() || !interaction.guildId) return;
 
@@ -86,9 +87,9 @@ export const command: SlashCommand = {
                 .setTitle(guildQueue[0].videoInfo.basic_info.title ?? '-')
                 .setColor(`#${config.bongColor}`)
                 .setDescription(`${playerDurationMinutes}:${playerDurationSeconds}/${songDurationMinutes}:${songDurationSeconds}\n\`${timelineSegments}\``)
-                .setFooter({text: `Added by ${guildQueue[0].addedBy}`})
+                .setFooter({ text: `Added by ${guildQueue[0].addedBy}` })
 
-            void interaction.reply({embeds: [playingNowEmbed]});
+            void interaction.reply({ embeds: [playingNowEmbed] });
         }
 
         function pausePlayer() {
@@ -98,7 +99,7 @@ export const command: SlashCommand = {
             if (audioPlayer?.state.status != AudioPlayerStatus.Playing) return sendWarnEmbed(interaction, 'I\'m not playing anything!');
 
             audioPlayer.pause();
-            void interaction.reply({content: 'Paused the player!'})
+            void interaction.reply({ content: 'Paused the player!' })
 
         }
 
@@ -106,10 +107,10 @@ export const command: SlashCommand = {
 
             const audioPlayer = audioPlayers.get(guildId);
 
-            if (audioPlayer?.state.status != AudioPlayerStatus.Playing) return sendWarnEmbed(interaction, 'I\'m not playing anything!');
+            if (audioPlayer?.state.status != AudioPlayerStatus.Paused && audioPlayer?.state.status != AudioPlayerStatus.Playing) return sendWarnEmbed(interaction, 'I\'m not playing anything!');
 
             audioPlayer.unpause();
-            void interaction.reply({content: 'Resumed the player!'})
+            void interaction.reply({ content: 'Resumed the player!' })
 
         }
 
@@ -119,11 +120,16 @@ export const command: SlashCommand = {
 
             if (!guildQueue || guildQueue.length == 0) return sendWarnEmbed(interaction, 'The queue is currently empty.');
 
-            const formattedSongEntriesList = '';
+            let formattedSongEntriesList = '';
+            const maxSongsPerPage = 10;
 
-            guildQueue.forEach(songEntry => {
 
-            });
+            for (let i = 0; i < guildQueue.length; i++) {
+                const currentSong = guildQueue[i];
+                if (!currentSong.videoInfo) return 
+                formattedSongEntriesList += `${i + 1}. ${currentSong.videoInfo?.basic_info?.title ?? ""} - ${currentSong.addedBy}\n`;
+                console.log(currentSong.videoInfo)
+            }
 
             const pageActionRow = new ActionRowBuilder().addComponents(
                 new ButtonBuilder()
@@ -136,6 +142,15 @@ export const command: SlashCommand = {
                     .setLabel('>')
             );
 
+            const pages = Math.ceil(guildQueue.length/maxSongsPerPage);
+            
+
+            const queueEmbed = new EmbedBuilder()
+                .setColor(`#${config.bongColor}`)
+                .setTitle(`Queue for ${interaction.guild?.name}`)
+                .setDescription(formattedSongEntriesList)
+
+            interaction.reply({embeds: [queueEmbed]})
 
         }
 

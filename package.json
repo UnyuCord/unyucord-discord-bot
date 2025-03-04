@@ -5,7 +5,9 @@
   "main": "src/index.ts",
   "type": "commonjs",
   "scripts": {
-    "start": "ts-node src/index.ts"
+    "start": "ts-node src/index.ts",
+    "deployCommands": "ts-node deployCommands.ts"
+    
   },
   "author": "Nikki",
   "license": "ISC",

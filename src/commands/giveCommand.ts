@@ -1,10 +1,5 @@
 import {SlashCommand} from "../interfaces/slashCommand";
-import {
-    ChatInputCommandInteraction,
-    SlashCommandBuilder,
-    SlashCommandIntegerOption,
-    SlashCommandUserOption
-} from "discord.js";
+import {SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandUserOption} from "discord.js";
 import {userModel} from "../db/schemas/userSchema";
 import {checkDbProfileExists} from "../db/dbHandler";
 import config from "../resources/config.json";
@@ -26,9 +21,8 @@ export const command: SlashCommand = {
 
         if (!interaction.isChatInputCommand()) return;
 
-        const chatInputCommandInteraction = interaction as ChatInputCommandInteraction;
-        const recipientUser = chatInputCommandInteraction.options.getUser('user', true);
-        const amount = chatInputCommandInteraction.options.getInteger('amount', true);
+        const recipientUser = interaction.options.getUser('user', true);
+        const amount = interaction.options.getInteger('amount', true);
         const senderDbUser = await userModel.findOne({discordId: interaction.user.id});
         const recipientDbUser = await checkDbProfileExists(recipientUser.id);
 

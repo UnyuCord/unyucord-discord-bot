@@ -11,9 +11,9 @@ export const command: SlashCommand = {
         .setDescription('Restarts the bot, scary!')
         .setDefaultMemberPermissions(PermissionsBitField.Flags.Administrator),
 
-    run: async (interaction: CommandInteraction) => {
+    async run(interaction: CommandInteraction) {
 
-        await interaction.reply('Bongbongbong... restarting...').then(() => {
+        interaction.reply('Bongbongbong... restarting...').then(() => {
             botClient.client.destroy().then(() => {
                 botClient.client.login(config.token);
             });

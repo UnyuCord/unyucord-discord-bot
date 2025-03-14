@@ -1,5 +1,5 @@
 import {SlashCommand} from "../interfaces/slashCommand";
-import {ChatInputCommandInteraction, CommandInteraction, EmbedBuilder, SlashCommandBuilder} from "discord.js";
+import {CommandInteraction, EmbedBuilder, SlashCommandBuilder} from "discord.js";
 import config from "../resources/config.json"
 
 export const command: SlashCommand = {
@@ -17,14 +17,13 @@ export const command: SlashCommand = {
 
         if (!interaction.isChatInputCommand()) return;
 
-        const commandInteraction = interaction as ChatInputCommandInteraction;
         const answer = config.eightBallResponses[Math.floor(Math.random() * config.eightBallResponses.length)];
         const eightBallEmbed = new EmbedBuilder()
             .setColor(`#${config.bongColor}`)
-            .setTitle(':8ball: ' + commandInteraction.options.getString('question'))
+            .setTitle(':8ball: ' + interaction.options.getString('question'))
             .setDescription(answer);
 
 
-        commandInteraction.reply({embeds: [eightBallEmbed]});
+        void interaction.reply({embeds: [eightBallEmbed]});
     }
 }

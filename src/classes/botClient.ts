@@ -5,6 +5,7 @@ import {getSlashCommands} from "../handlers/commandHandler";
 import {registerEvents} from "../handlers/eventHandler";
 import {Mongoose} from "mongoose";
 import {logError, logInfo, logSuccess} from "../handlers/logHandler";
+import Innertube from "youtubei.js";
 
 export default class BotClient {
 
@@ -12,12 +13,17 @@ export default class BotClient {
         intents: [
             GatewayIntentBits.Guilds,
             GatewayIntentBits.GuildMessages,
-            GatewayIntentBits.MessageContent
+            GatewayIntentBits.MessageContent,
+            GatewayIntentBits.GuildVoiceStates
         ]
     });
 
+    // CommandName, SlashCommand
     slashCommands: Collection<string, SlashCommand> = new Collection<string, SlashCommand>();
+    //TODO: Decide if db and innertube should be put in their respective handlers
     db: Mongoose = new Mongoose();
+    innertube!: Innertube;
+    //TODO: Add events for db disconnects to set this flag to false and vice versa
     connectedToDb = false;
 
     async start() {
@@ -29,6 +35,8 @@ export default class BotClient {
         await getSlashCommands()
             .then(slashCommands => this.slashCommands = slashCommands)
             .catch(error => logError(error));
+
+        this.innertube = await Innertube.create();
 
         logInfo('Connecting to db...');
          await this.db.connect(config.mongoUri)

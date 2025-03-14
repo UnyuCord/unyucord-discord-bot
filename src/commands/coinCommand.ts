@@ -9,11 +9,8 @@ export const command: SlashCommand = {
 
     run: (interaction: CommandInteraction) => {
 
-        if (Math.round(Math.random())=== 0) {
-            return interaction.reply('Heads! :coin:');
-        }
-
-        interaction.reply('Tails! :coin:');
-
+        if (Math.round(Math.random()) === 0) {
+            void interaction.reply('Heads! :coin:');
+        } else void interaction.reply('Tails! :coin:');
     }
 }

@@ -49,3 +49,14 @@ export function sendWarnEmbed(interaction: CommandInteraction, message: string) 
         void interaction.followUp({embeds: [warnEmbed], ephemeral: true});
     } else void interaction.reply({embeds: [warnEmbed], ephemeral: true});
 }
+
+export function sendGenericErrorEmbed(interaction: CommandInteraction) {
+    const embed = new EmbedBuilder()
+        .setColor('Red')
+        .setTitle('An error has occured!')
+        .setDescription('Please try again.')
+
+    if(interaction.replied) {
+        void interaction.followUp({embeds: [embed], ephemeral: true});
+    } else void interaction.reply({embeds: [embed], ephemeral: true})
+}

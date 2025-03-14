@@ -32,7 +32,7 @@ export const command: SlashCommand = {
                 void setMusicChannel(interaction.options.getChannel('channel', true).id);
                 break;
         }
-
+        // Todo: for some fucking reason the fields are inverted????? gotta check that
         async function setMusicChannel(channelId: Snowflake) {
 
             let musicChannel = await musicChannelModel.findOne({guildId: interaction.guildId});

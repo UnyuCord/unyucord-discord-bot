@@ -1,18 +1,20 @@
 import { SlashCommand } from "../interfaces/slashCommand";
 import {
     ActionRowBuilder,
-    ButtonBuilder,
+    ButtonBuilder, ButtonInteraction,
     ButtonStyle,
-    CommandInteraction,
+    CommandInteraction, ComponentType,
     EmbedBuilder,
     SlashCommandBuilder,
     SlashCommandSubcommandBuilder
 } from "discord.js";
 import { audioPlayers, guildQueues } from "../handlers/musicHandler";
-import { sendWarnEmbed } from "../handlers/errorHandler";
+import {sendGenericErrorEmbed, sendWarnEmbed} from "../handlers/errorHandler";
 import { AudioPlayerStatus } from "@discordjs/voice";
 import config from "../resources/config.json";
 import { format } from "path";
+import {logError} from "../handlers/logHandler";
+import {SongEntry} from "../classes/songEntry";
 
 //TODO: WIP showQueue
 export const command: SlashCommand = {
@@ -114,43 +116,104 @@ export const command: SlashCommand = {
 
         }
 
-        function showQueue() {
+        async function showQueue() {
 
-            const guildQueue = guildQueues.get(guildId);
+            function iterateOverSongs(guildQueue:SongEntry[]): string{
+                let pageSongTitles = ``
+                for(let i = 0; i < maxSongsPerPage; i++){
+                    if(i + (currentPage - 1) * maxSongsPerPage < guildQueue.length){
+                        const currentSong = guildQueue[i + (currentPage - 1) * maxSongsPerPage];
+                        if (!currentSong.videoInfo) return ``
+                        if (currentSong.videoInfo?.basic_info?.title?.length ?? 0 > maxTitleLength){
+                            const formattedTrunctuatedSongTitle = currentSong.videoInfo?.basic_info?.title?.substring(0, maxTitleLength-1) + "..."
+                            pageSongTitles += `${i + (currentPage - 1) * maxSongsPerPage + 1}. ${formattedTrunctuatedSongTitle} - ${currentSong.addedBy}\n`;
+                        }else{
+                            pageSongTitles += `${i + (currentPage - 1) * maxSongsPerPage + 1}. ${currentSong.videoInfo?.basic_info?.title ?? ""} - ${currentSong.addedBy}\n`;
+                        }
+                    }
+                }
+
+                return pageSongTitles;
+            }
+
+            let guildQueue = guildQueues.get(guildId);
 
             if (!guildQueue || guildQueue.length == 0) return sendWarnEmbed(interaction, 'The queue is currently empty.');
 
             let formattedSongEntriesList = '';
+            const maxTitleLength = 50;
             const maxSongsPerPage = 10;
 
 
-            for (let i = 0; i < guildQueue.length; i++) {
-                const currentSong = guildQueue[i];
-                if (!currentSong.videoInfo) return 
-                formattedSongEntriesList += `${i + 1}. ${currentSong.videoInfo?.basic_info?.title ?? ""} - ${currentSong.addedBy}\n`;
-                console.log(currentSong.videoInfo)
-            }
+            formattedSongEntriesList = iterateOverSongs(guildQueue)
+            let pages = Math.ceil(guildQueue.length/maxSongsPerPage);
+            let currentPage = 1
 
-            const pageActionRow = new ActionRowBuilder().addComponents(
+            const pageActionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
                 new ButtonBuilder()
                     .setCustomId('queuePreviousPage')
                     .setStyle(ButtonStyle.Primary)
-                    .setLabel('<'),
+                    .setLabel('<')
+                    .setDisabled(currentPage <= 1),
                 new ButtonBuilder()
                     .setCustomId('queueNextPage')
                     .setStyle(ButtonStyle.Primary)
                     .setLabel('>')
+                    .setDisabled(currentPage >= pages)
             );
-
-            const pages = Math.ceil(guildQueue.length/maxSongsPerPage);
-            
 
             const queueEmbed = new EmbedBuilder()
                 .setColor(`#${config.bongColor}`)
                 .setTitle(`Queue for ${interaction.guild?.name}`)
                 .setDescription(formattedSongEntriesList)
+                .setFooter({text: `Page ${currentPage}/${pages}`})
 
-            interaction.reply({embeds: [queueEmbed]})
+            const originalMessage = await interaction.reply({fetchReply: true, embeds: [queueEmbed], components: [pageActionRow]})
+
+            const searchButtonCollector = originalMessage.createMessageComponentCollector({
+                componentType: ComponentType.Button,
+                time: 20000
+            });
+
+            searchButtonCollector.on('collect', async (collectedInteraction) => {
+                if(collectedInteraction.user.id !== interaction.user.id) return;
+
+                guildQueue = guildQueues.get(guildId);
+                if (!guildQueue || guildQueue.length == 0) return sendWarnEmbed(interaction, 'The queue is currently empty.');
+                searchButtonCollector.resetTimer();
+                pages = Math.ceil(guildQueue.length/maxSongsPerPage)
+
+                switch(collectedInteraction.customId){
+                    case 'queuePreviousPage':
+                        if(--currentPage < 1) currentPage = 1;
+                        break;
+                    case 'queueNextPage':
+                        if(++currentPage > pages) currentPage = pages;
+                        break;
+                    default:
+                        logError("This shouldn't happen right?")
+                        break;
+                }
+
+                formattedSongEntriesList = ``
+
+                formattedSongEntriesList = iterateOverSongs(guildQueue)
+                queueEmbed
+                    .setDescription(formattedSongEntriesList)
+                    .setFooter({text: `Page ${currentPage}/${pages}`})
+
+                pageActionRow.components[0].setDisabled(currentPage <= 1);
+                pageActionRow.components[1].setDisabled(currentPage >= pages);
+
+                await collectedInteraction.deferUpdate();
+                await originalMessage.edit({embeds: [queueEmbed], components: [pageActionRow]})
+            })
+
+
+            searchButtonCollector.once('end', () => {
+                originalMessage.edit({embeds: [queueEmbed], components: []})
+            });
+
 
         }
 

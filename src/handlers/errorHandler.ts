@@ -19,6 +19,7 @@ export function sendErrorEmbed(interaction: CommandInteraction, error: any) {
         .setFooter({text: 'Blame Nikki for this...'})
 
     logError(error);
+  
     if (interaction.replied) {
         void interaction.followUp({embeds: [errorEmbed], ephemeral: true});
     } else void interaction.reply({embeds: [errorEmbed], ephemeral: true});

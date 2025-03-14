@@ -2,7 +2,9 @@ import {SlashCommand} from "../interfaces/slashCommand";
 import {
     ActionRowBuilder,
     ButtonBuilder,
+    ButtonInteraction,
     ButtonStyle,
+    ChatInputCommandInteraction,
     Colors,
     CommandInteraction,
     ComponentType,
@@ -129,6 +131,7 @@ export const command: SlashCommand = {
                     break;
 
             }
+          
             await buttonInteraction.deferUpdate();
         });
 

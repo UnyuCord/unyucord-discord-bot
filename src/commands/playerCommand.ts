@@ -9,14 +9,13 @@ import {
     SlashCommandBuilder,
     SlashCommandSubcommandBuilder
 } from "discord.js";
-import {audioPlayers, guildQueues} from "../handlers/musicHandler";
+import {audioPlayers, guildQueues, playNextAudio, removeFirstFromQueue} from "../handlers/musicHandler";
 import {sendWarnEmbed} from "../handlers/errorHandler";
 import {AudioPlayerStatus} from "@discordjs/voice";
 import config from "../resources/config.json";
 import {logError} from "../handlers/logHandler";
 import {SongEntry} from "../classes/songEntry";
 
-//TODO: WIP showQueue
 export const command: SlashCommand = {
     data: new SlashCommandBuilder()
         .setName('player')
@@ -32,7 +31,10 @@ export const command: SlashCommand = {
             .setDescription('Resumes the player.'))
         .addSubcommand(new SlashCommandSubcommandBuilder()
             .setName('queue')
-            .setDescription('Displays the song queue.')),
+            .setDescription('Displays the song queue.'))
+        .addSubcommand(new SlashCommandSubcommandBuilder()
+            .setName('skip')
+            .setDescription('Skips the current song.')),
     dbRequired: false,
     /*
     TODO:
@@ -59,7 +61,10 @@ export const command: SlashCommand = {
                 resumePlayer();
                 break;
             case 'queue':
-                showQueue();
+                void showQueue();
+                break;
+            case 'skip':
+                skipCurrentSong();
                 break;
         }
 
@@ -224,6 +229,18 @@ export const command: SlashCommand = {
 
                 return pageSongTitles;
             }
+        }
+
+        function skipCurrentSong(){
+            const queue = guildQueues.get(guildId);
+            const player = audioPlayers.get(guildId);
+            if (!queue || queue.length == 0 || !player) return sendWarnEmbed(interaction, 'The queue is currently empty.');
+
+            if(queue.length == 1){
+                removeFirstFromQueue(guildId)
+                player.stop(true)
+
+            }else void playNextAudio(guildId, interaction)
         }
     }
 }

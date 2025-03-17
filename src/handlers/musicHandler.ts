@@ -6,7 +6,6 @@ import {sendErrorEmbedCustomMessage, sendWarnEmbed} from "./errorHandler";
 import config from "../resources/config.json";
 import prism from "prism-media";
 import {musicChannelModel} from "../db/schemas/musicChannelSchema";
-import {VideoInfo} from "youtubei.js/dist/src/parser/youtube";
 
 // GuildId, SongEntry
 export const guildQueues: Collection<Snowflake, SongEntry[]> = new Collection<Snowflake, SongEntry[]>();
@@ -47,7 +46,7 @@ export async function playNextAudio(guildId: Snowflake, interaction: CommandInte
     if (queue.length === 0) {
 
         const idleTimeOutInMs = 120000;
-        const timeOut = setTimeout(() => disconnect(guildId, voiceConnection), idleTimeOutInMs);
+        const timeOut = setTimeout(() => disconnectFromVc(guildId, voiceConnection), idleTimeOutInMs);
         idleTimeOut.set(guildId, timeOut);
 
         return;
@@ -99,14 +98,11 @@ export async function playAudio(songEntry: SongEntry, interaction: CommandIntera
     audioPlayer.play(audioResource);
 }
 
-export async function disconnect(guildId: Snowflake, connection: VoiceConnection) {
+export async function disconnectFromVc(guildId: Snowflake, connection: VoiceConnection) {
 
-    const musicChannel = await musicChannelModel.findOne({guildId: guildId});
-
-    if (guildId || !musicChannel || !musicChannel.channelId) return;
     guildQueues.delete(guildId);
     audioPlayers.delete(guildId);
     idleTimeOut.delete(guildId);
-    connection?.destroy();
-    void (botClient.client.channels.cache.get(musicChannel.channelId) as TextChannel).send('No activity for two minutes, I\'m outta here!');
+    connection.destroy();
+
 }

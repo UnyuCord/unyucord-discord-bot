@@ -7,7 +7,7 @@ import {checkDbProfileExists} from "../db/dbHandler";
 
 export const command: SlashCommand = {
     data: new SlashCommandBuilder()
-        .setName('info')
+        .setName('member')
         .setDescription('Displays information about either you, or a selected user.')
         .addMentionableOption(option => {
             return option.setName('user')

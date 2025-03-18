@@ -1,4 +1,4 @@
-import {SlashCommand} from "../interfaces/slashCommand";
+import {SlashCommand} from "../../interfaces/slashCommand";
 import {
     ChannelType,
     SlashCommandBuilder,
@@ -6,7 +6,7 @@ import {
     SlashCommandSubcommandBuilder,
     Snowflake
 } from "discord.js";
-import {musicChannelModel} from "../db/schemas/musicChannelSchema";
+import {musicChannelModel} from "../../db/schemas/musicChannelSchema";
 
 export const command: SlashCommand = {
     data: new SlashCommandBuilder()

@@ -1,8 +1,8 @@
-import {SlashCommand} from "../interfaces/slashCommand";
+import {SlashCommand} from "../../interfaces/slashCommand";
 import {CommandInteraction, EmbedBuilder, SlashCommandBuilder} from "discord.js";
-import config from "../resources/config.json";
-import {botClient} from '..';
-import {checkDbProfileExists} from "../db/dbHandler";
+import config from "../../resources/config.json";
+import {botClient} from '../../index';
+import {checkDbProfileExists} from "../../db/dbHandler";
 
 
 export const command: SlashCommand = {

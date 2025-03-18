@@ -1,7 +1,7 @@
-import {SlashCommand} from "../interfaces/slashCommand";
+import {SlashCommand} from "../../interfaces/slashCommand";
 import {SlashCommandBuilder} from "discord.js";
-import {sendGenericErrorEmbed, sendWarnEmbed} from "../handlers/errorHandler";
-import {audioPlayers, guildQueues, playNextAudio, removeFirstFromQueue} from "../handlers/musicHandler";
+import {sendGenericErrorEmbed, sendWarnEmbed} from "../../handlers/errorHandler";
+import {audioPlayers, guildQueues, playNextAudio, removeFirstFromQueue} from "../../handlers/musicHandler";
 
 
 export const command: SlashCommand = {

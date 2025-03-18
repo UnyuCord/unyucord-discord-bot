@@ -1,9 +1,9 @@
-import {SlashCommand} from "../interfaces/slashCommand";
+import {SlashCommand} from "../../interfaces/slashCommand";
 import {CommandInteraction, EmbedBuilder, SlashCommandBuilder} from "discord.js";
-import {audioPlayers, guildQueues} from "../handlers/musicHandler";
+import {audioPlayers, guildQueues} from "../../handlers/musicHandler";
 import {AudioPlayerStatus} from "@discordjs/voice";
-import {sendWarnEmbed} from "../handlers/errorHandler";
-import config from "../resources/config.json";
+import {sendWarnEmbed} from "../../handlers/errorHandler";
+import config from "../../resources/config.json";
 
 export const command: SlashCommand = {
     data: new SlashCommandBuilder()

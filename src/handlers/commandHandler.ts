@@ -7,13 +7,18 @@ import {logInfo, logSuccess} from "./logHandler";
 export async function getSlashCommands(): Promise<Collection<string, SlashCommand>> {
     logInfo('Reading commands...');
 
-    const commandFiles = readdirSync(path.join(__dirname, '../commands'));
+    const folders = readdirSync(path.join(__dirname, '../commands/'));
     const slashCommandCollection = new Collection<string, SlashCommand>();
 
-    for (const fileName of commandFiles) {
-        logInfo(`Reading command ${fileName}...`);
-        const { command } = await import(path.join(__dirname, `../commands/${fileName}`)) as { command: SlashCommand };
-        slashCommandCollection.set(command.data.name, command);
+    for (const folder of folders) {
+        logInfo(`Reading folder ${folder}...`);
+        const files = readdirSync(path.join(__dirname, `../commands/${folder}/`));
+        for (const file of files) {
+            logInfo(`Reading command ${file}...`);
+            const { command } = await import(path.join(__dirname, `../commands/${folder}/${file}`)) as { command: SlashCommand };
+            slashCommandCollection.set(command.data.name, command);
+        }
+        logSuccess(`Finished reading commands in ${folder}!`)
     }
 
     logSuccess('Finished reading commands!');

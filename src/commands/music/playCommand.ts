@@ -1,29 +1,20 @@
-import {SlashCommand} from "../interfaces/slashCommand";
-import {EmbedBuilder, SlashCommandBuilder, SlashCommandStringOption, TextChannel} from "discord.js";
-import {
-    AudioPlayer,
-    AudioPlayerStatus,
-    createAudioPlayer,
-    createAudioResource,
-    getVoiceConnection,
-    VoiceConnection
-} from "@discordjs/voice";
-import prism from 'prism-media';
+import {SlashCommand} from "../../interfaces/slashCommand";
+import {EmbedBuilder, SlashCommandBuilder, SlashCommandStringOption} from "discord.js";
+import {AudioPlayer, AudioPlayerStatus, createAudioPlayer, getVoiceConnection, VoiceConnection} from "@discordjs/voice";
 import {
     addToQueue,
     audioPlayers,
     guildQueues,
-    idleTimeOut, playAudio,
-    playNextAudio,
-    removeFirstFromQueue
-} from "../handlers/musicHandler";
-import {botClient} from "../index";
-import {sendErrorEmbedCustomMessage, sendWarnEmbed} from "../handlers/errorHandler";
-import config from "../resources/config.json";
+    idleTimeOut,
+    playAudio,
+    playNextAudio
+} from "../../handlers/musicHandler";
+import {botClient} from "../../index";
+import {sendWarnEmbed} from "../../handlers/errorHandler";
+import config from "../../resources/config.json";
 import {connectToSenderVc} from "./joinCommand";
-import {checkMusicChannelSet} from "../db/dbHandler";
-import {musicChannelModel} from "../db/schemas/musicChannelSchema";
-import {SongEntry} from "../classes/songEntry";
+import {checkMusicChannelSet} from "../../db/dbHandler";
+import {SongEntry} from "../../classes/songEntry";
 
 export const command: SlashCommand = {
     data: new SlashCommandBuilder()

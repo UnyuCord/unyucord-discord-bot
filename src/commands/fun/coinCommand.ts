@@ -1,4 +1,4 @@
-import {SlashCommand} from "../interfaces/slashCommand";
+import {SlashCommand} from "../../interfaces/slashCommand";
 import {CommandInteraction, SlashCommandBuilder} from "discord.js";
 
 

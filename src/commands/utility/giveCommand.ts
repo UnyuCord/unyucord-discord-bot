@@ -1,8 +1,8 @@
-import {SlashCommand} from "../interfaces/slashCommand";
+import {SlashCommand} from "../../interfaces/slashCommand";
 import {SlashCommandBuilder, SlashCommandIntegerOption, SlashCommandUserOption} from "discord.js";
-import {userModel} from "../db/schemas/userSchema";
-import {checkDbProfileExists} from "../db/dbHandler";
-import config from "../resources/config.json";
+import {userModel} from "../../db/schemas/userSchema";
+import {checkDbProfileExists} from "../../db/dbHandler";
+import config from "../../resources/config.json";
 
 export const command: SlashCommand = {
     data: new SlashCommandBuilder()

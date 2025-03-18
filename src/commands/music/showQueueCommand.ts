@@ -1,4 +1,4 @@
-import {SlashCommand} from "../interfaces/slashCommand";
+import {SlashCommand} from "../../interfaces/slashCommand";
 import {
     ActionRowBuilder,
     ButtonBuilder,
@@ -7,11 +7,11 @@ import {
     EmbedBuilder,
     SlashCommandBuilder
 } from "discord.js";
-import {guildQueues} from "../handlers/musicHandler";
-import {sendGenericErrorEmbed, sendWarnEmbed} from "../handlers/errorHandler";
-import config from "../resources/config.json";
-import {logError} from "../handlers/logHandler";
-import {SongEntry} from "../classes/songEntry";
+import {guildQueues} from "../../handlers/musicHandler";
+import {sendGenericErrorEmbed, sendWarnEmbed} from "../../handlers/errorHandler";
+import config from "../../resources/config.json";
+import {logError} from "../../handlers/logHandler";
+import {SongEntry} from "../../classes/songEntry";
 
 
 export const command: SlashCommand = {

@@ -1,4 +1,4 @@
-import {SlashCommand} from "../interfaces/slashCommand";
+import {SlashCommand} from "../../interfaces/slashCommand";
 import {
     ActionRowBuilder,
     ButtonBuilder,
@@ -10,10 +10,10 @@ import {
     SlashCommandBuilder
 } from "discord.js";
 import axios from "axios";
-import {GoogleSearchResponse} from "../interfaces/googleSearchResponse";
-import config from '../resources/config.json'
+import {GoogleSearchResponse} from "../../interfaces/googleSearchResponse";
+import config from '../../resources/config.json'
 import * as https from "https";
-import {logError} from "../handlers/logHandler";
+import {logError} from "../../handlers/logHandler";
 
 
 export const command: SlashCommand = {

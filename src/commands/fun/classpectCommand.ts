@@ -1,6 +1,6 @@
-import {SlashCommand} from "../interfaces/slashCommand";
+import {SlashCommand} from "../../interfaces/slashCommand";
 import {CommandInteraction, EmbedBuilder, SlashCommandBuilder} from "discord.js";
-import classpect from "../resources/classpect.json";
+import classpect from "../../resources/classpect.json";
 
 export const command: SlashCommand = {
     data: new SlashCommandBuilder()

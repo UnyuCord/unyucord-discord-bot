@@ -1,10 +1,8 @@
-import {SlashCommand} from "../interfaces/slashCommand";
+import {SlashCommand} from "../../interfaces/slashCommand";
 import {
     ActionRowBuilder,
     ButtonBuilder,
-    ButtonInteraction,
     ButtonStyle,
-    ChatInputCommandInteraction,
     Colors,
     CommandInteraction,
     ComponentType,
@@ -12,9 +10,9 @@ import {
     SlashCommandBuilder,
     SlashCommandIntegerOption
 } from "discord.js";
-import {userModel} from "../db/schemas/userSchema";
-import config from '../resources/config.json';
-import {sendErrorEmbedCustomMessage} from "../handlers/errorHandler";
+import {userModel} from "../../db/schemas/userSchema";
+import config from '../../resources/config.json';
+import {sendErrorEmbedCustomMessage} from "../../handlers/errorHandler";
 
 export const command: SlashCommand = {
     data: new SlashCommandBuilder()

@@ -1,7 +1,7 @@
-import {SlashCommand} from "../interfaces/slashCommand";
+import {SlashCommand} from "../../interfaces/slashCommand";
 import {CommandInteraction, SlashCommandBuilder} from "discord.js";
-import {botClient} from "../index";
-import {sendErrorEmbed} from "../handlers/errorHandler";
+import {botClient} from "../../index";
+import {sendErrorEmbed} from "../../handlers/errorHandler";
 
 export const command: SlashCommand = {
     data: new SlashCommandBuilder()

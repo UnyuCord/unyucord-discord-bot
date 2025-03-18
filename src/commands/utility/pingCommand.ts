@@ -1,6 +1,6 @@
-import {SlashCommand} from "../interfaces/slashCommand";
+import {SlashCommand} from "../../interfaces/slashCommand";
 import {CommandInteraction, EmbedBuilder, SlashCommandBuilder} from "discord.js";
-import {botClient} from "../index";
+import {botClient} from "../../index";
 
 
 export const command: SlashCommand = {

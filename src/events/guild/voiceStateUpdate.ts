@@ -8,7 +8,7 @@ export const eventData: EventData = {
 
     name: Events.VoiceStateUpdate,
     once: false,
-    async execute(oldState: VoiceState, newState: VoiceState) {
+    async run(oldState: VoiceState, newState: VoiceState) {
         if (oldState.member?.user.bot
             || !oldState.member
             || !oldState.channelId

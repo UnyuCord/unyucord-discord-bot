@@ -1,5 +1,5 @@
 export interface EventData {
     name: string;
     once: boolean;
-    execute: (...args: any) => void | Promise<void>;
+    run: (...args: any) => void | Promise<void>;
 }

@@ -8,7 +8,7 @@ export const eventData: EventData = {
 
     name: Events.ClientReady,
     once: true,
-    execute(): void {
+    run(): void {
 
         if (botClient.client.user) {
             botClient.client.user.setActivity('Hi! I am BongBong Lobotomy Corporation!!!');

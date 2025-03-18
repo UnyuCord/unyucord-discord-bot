@@ -9,7 +9,7 @@ export const eventData: EventData = {
 
     name: Events.InteractionCreate,
     once: false,
-    execute: async function (interaction: Interaction) {
+    run: async function (interaction: Interaction) {
 
         if (!interaction.isCommand() || interaction.user.bot) return;
 

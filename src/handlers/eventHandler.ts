@@ -23,11 +23,11 @@ export function registerEvents() {
 
             if (eventData.once) {
                 botClient.client.once(eventData.name, (...args) => {
-                    eventData.execute(...args);
+                    eventData.run(...args);
                 });
             } else {
                 botClient.client.on(eventData.name, (...args) => {
-                    eventData.execute(...args);
+                    eventData.run(...args);
                 });
             }
         });

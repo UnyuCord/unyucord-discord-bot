@@ -6,7 +6,7 @@ export const eventData: EventData = {
 
     name: Events.MessageCreate,
     once: false,
-    execute(message: Message) {
+    run(message: Message) {
         if (!message.content.toLowerCase().includes('keks') || config.keksImages.length < 1) return;
 
         void message.reply(config.keksImages[Math.floor(Math.random() * config.keksImages.length)]);

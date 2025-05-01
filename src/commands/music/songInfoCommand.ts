@@ -16,7 +16,7 @@ export const command: SlashCommand = {
 
         const guildQueue = guildQueues.get(guildId);
         const audioPlayer = audioPlayers.get(guildId);
-        
+
         if (!guildQueue
             || !audioPlayer
             || audioPlayer.state.status == AudioPlayerStatus.Idle

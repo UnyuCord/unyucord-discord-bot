@@ -16,11 +16,10 @@ export const command: SlashCommand = {
 
         const guildQueue = guildQueues.get(guildId);
         const audioPlayer = audioPlayers.get(guildId);
-
-        // TODO: Make whatever the hell this is prettier
+        
         if (!guildQueue
             || !audioPlayer
-            || audioPlayer.state.status != AudioPlayerStatus.Playing
+            || audioPlayer.state.status == AudioPlayerStatus.Idle
             || !guildQueue[0].videoInfo.basic_info.duration
             || guildQueue.length == 0) return sendWarnEmbed(interaction, 'I\'m not playing anything!');
 

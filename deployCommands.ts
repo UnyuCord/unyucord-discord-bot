@@ -3,6 +3,7 @@ import config from "./src/resources/config.json";
 import { getSlashCommands } from "./src/handlers/commandHandler";
 
 // TODO: God this is all ugly af please fix this future me
+// It runs the bot for some goddamn reason 
 const rest = new REST({ version: "10" }).setToken(config.token);
 getSlashCommands().then(commands => {
     const commandsData = commands.map(command => command.data.toJSON());

@@ -1,5 +1,11 @@
 import {Collection, CommandInteraction, EmbedBuilder, Snowflake, TextChannel} from "discord.js";
-import {AudioPlayer, createAudioResource, getVoiceConnection, VoiceConnection} from "@discordjs/voice";
+import {
+    AudioPlayer,
+    createAudioResource, DiscordGatewayAdapterCreator,
+    getVoiceConnection,
+    joinVoiceChannel,
+    VoiceConnection
+} from "@discordjs/voice";
 import {SongEntry} from "../classes/songEntry";
 import {botClient} from "../index";
 import {sendErrorEmbedCustomMessage, sendWarnEmbed} from "./errorHandler";
@@ -98,11 +104,35 @@ export async function playAudio(songEntry: SongEntry, interaction: CommandIntera
     audioPlayer.play(audioResource);
 }
 
-export async function disconnectFromVc(guildId: Snowflake, connection: VoiceConnection) {
+export async function disconnectFromVc(guildId: Snowflake, connection?: VoiceConnection) {
+
 
     guildQueues.delete(guildId);
     audioPlayers.delete(guildId);
     idleTimeOut.delete(guildId);
+    console.log("fokin googoo gaga mate");
+
+    if(!connection) return;
     connection.destroy();
 
+}
+
+export async function connectToSenderVc(interaction: CommandInteraction) {
+
+    if (!interaction.guild) return;
+    const existingVoiceConnectionInGuild = getVoiceConnection(interaction.guild.id);
+    if (existingVoiceConnectionInGuild) return existingVoiceConnectionInGuild;
+
+    const channels = await interaction.guild.channels.fetch();
+    const userVoiceChannel = channels
+        .filter(channel => channel?.isVoiceBased())
+        .find(channel => channel?.members.has(interaction.user.id));
+
+    if (!userVoiceChannel) return;
+
+    return joinVoiceChannel({
+        adapterCreator: userVoiceChannel.guild.voiceAdapterCreator as DiscordGatewayAdapterCreator,
+        channelId: userVoiceChannel.id,
+        guildId: userVoiceChannel.guildId
+    });
 }

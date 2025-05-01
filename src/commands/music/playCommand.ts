@@ -7,12 +7,12 @@ import {
     guildQueues,
     idleTimeOut,
     playAudio,
-    playNextAudio
+    playNextAudio,
+    connectToSenderVc
 } from "../../handlers/musicHandler";
 import {botClient} from "../../index";
 import {sendWarnEmbed} from "../../handlers/errorHandler";
 import config from "../../resources/config.json";
-import {connectToSenderVc} from "./joinCommand";
 import {checkMusicChannelSet} from "../../db/dbHandler";
 import {SongEntry} from "../../classes/songEntry";
 

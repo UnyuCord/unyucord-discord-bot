@@ -1,6 +1,6 @@
 import {EventData} from "../../interfaces/eventData";
-import {ChannelType, Events, VoiceState} from "discord.js";
-import {getVoiceConnection} from "@discordjs/voice";
+import {ChannelType, Events, TextChannel, VoiceState} from "discord.js";
+import {getVoiceConnection, VoiceConnectionStatus} from "@discordjs/voice";
 import {botClient} from "../../index";
 import {disconnectFromVc} from "../../handlers/musicHandler";
 
@@ -9,15 +9,23 @@ export const eventData: EventData = {
     name: Events.VoiceStateUpdate,
     once: false,
     async run(oldState: VoiceState, newState: VoiceState) {
-        if (oldState.member?.user.bot
-            || !oldState.member
+        console.log("what")
+
+        console.log(oldState.member?.user.bot)
+
+        if (!oldState.member
             || !oldState.channelId
             || oldState.channel?.members.size === newState.channel?.members.size) return;
 
-        const connection = getVoiceConnection(newState.guild.id);
-        if (!connection) return;
+        console.log("what but again");
 
-        const channel = await oldState.member.guild.channels.fetch(oldState.channelId);
+        const connection = getVoiceConnection(newState.guild.id);
+
+        console.log(connection);
+
+        if (!connection || connection.state.status == VoiceConnectionStatus.Disconnected) return disconnectFromVc(newState.guild.id, undefined);
+
+        const channel = await oldState.member?.guild.channels.fetch(oldState.channelId);
 
         if (!channel || channel.type != ChannelType.GuildVoice) return;
 

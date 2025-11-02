@@ -5,7 +5,8 @@ import {getSlashCommands} from "../handlers/commandHandler";
 import {registerEvents} from "../handlers/eventHandler";
 import {Mongoose} from "mongoose";
 import {logError, logInfo, logSuccess} from "../handlers/logHandler";
-import Innertube from "youtubei.js";
+import Innertube, {Types} from "youtubei.js";
+import {Platform} from 'youtubei.js/agnostic';
 
 export default class BotClient {
 
@@ -35,6 +36,22 @@ export default class BotClient {
         await getSlashCommands()
             .then(slashCommands => this.slashCommands = slashCommands)
             .catch(error => logError(error));
+
+        Platform.shim.eval = async (data: Types.BuildScriptResult, env: Record<string, Types.VMPrimative>) => {
+            const properties = [];
+
+            if(env.n) {
+                properties.push(`n: exportedVars.nFunction("${env.n}")`)
+            }
+
+            if (env.sig) {
+                properties.push(`sig: exportedVars.sigFunction("${env.sig}")`)
+            }
+
+            const code = `${data.output}\nreturn { ${properties.join(', ')} }`;
+
+            return new Function(code)();
+        }
 
         this.innertube = await Innertube.create();
 

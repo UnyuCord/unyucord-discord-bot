@@ -1,5 +1,5 @@
 import {EventData} from "../../interfaces/eventData";
-import {ChannelType, Events, TextChannel, VoiceState} from "discord.js";
+import {ChannelType, Events, VoiceState} from "discord.js";
 import {getVoiceConnection, VoiceConnectionStatus} from "@discordjs/voice";
 import {botClient} from "../../index";
 import {disconnectFromVc} from "../../handlers/musicHandler";
@@ -9,7 +9,6 @@ export const eventData: EventData = {
     name: Events.VoiceStateUpdate,
     once: false,
     async run(oldState: VoiceState, newState: VoiceState) {
-        console.log("what")
 
         console.log(oldState.member?.user.bot)
 
@@ -17,13 +16,11 @@ export const eventData: EventData = {
             || !oldState.channelId
             || oldState.channel?.members.size === newState.channel?.members.size) return;
 
-        console.log("what but again");
-
         const connection = getVoiceConnection(newState.guild.id);
 
         console.log(connection);
 
-        if (!connection || connection.state.status == VoiceConnectionStatus.Disconnected) return disconnectFromVc(newState.guild.id, undefined);
+        if (!connection || connection.state.status == VoiceConnectionStatus.Disconnected) return disconnectFromVc(newState.guild.id);
 
         const channel = await oldState.member?.guild.channels.fetch(oldState.channelId);
 

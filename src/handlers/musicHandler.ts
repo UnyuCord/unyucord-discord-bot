@@ -1,7 +1,8 @@
 import {Collection, CommandInteraction, EmbedBuilder, Snowflake, TextChannel} from "discord.js";
 import {
     AudioPlayer,
-    createAudioResource, DiscordGatewayAdapterCreator,
+    createAudioResource,
+    DiscordGatewayAdapterCreator,
     getVoiceConnection,
     joinVoiceChannel,
     VoiceConnection
@@ -110,7 +111,6 @@ export async function disconnectFromVc(guildId: Snowflake, connection?: VoiceCon
     guildQueues.delete(guildId);
     audioPlayers.delete(guildId);
     idleTimeOut.delete(guildId);
-    console.log("fokin googoo gaga mate");
 
     if(!connection) return;
     connection.destroy();

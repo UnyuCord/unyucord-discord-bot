@@ -20,6 +20,6 @@
     "sodium-native": "^4.3.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2",
-    "youtubei.js": "^15.0.1"
+    "youtubei.js": "^16.0.1"
   }
 }
